@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,6 +101,13 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void invalidPathParameterReturns400WithParameterName() throws Exception {
+        mockMvc.perform(get("/test/items/abc"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Parâmetro inválido: id."));
+    }
+
+    @Test
     void unexpectedExceptionReturns500WithoutInternalDetails() throws Exception {
         mockMvc.perform(get("/test/unexpected"))
                 .andExpect(status().isInternalServerError())
@@ -144,6 +152,10 @@ class GlobalExceptionHandlerTest {
 
         @PostMapping("/test/validation")
         void validation(@Valid @RequestBody SampleRequest request) {
+        }
+
+        @GetMapping("/test/items/{id}")
+        void item(@PathVariable Long id) {
         }
 
         @GetMapping("/test/unexpected")

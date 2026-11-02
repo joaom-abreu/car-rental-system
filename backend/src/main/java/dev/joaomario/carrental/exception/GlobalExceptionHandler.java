@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.LinkedHashMap;
@@ -21,6 +22,7 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final String VALIDATION_MESSAGE = "Dados inválidos. Confira os campos destacados.";
     private static final String MALFORMED_BODY_MESSAGE = "Corpo da requisição inválido.";
+    private static final String INVALID_PARAMETER_MESSAGE = "Parâmetro inválido: %s.";
     private static final String RESOURCE_NOT_FOUND_MESSAGE = "Recurso não encontrado.";
     private static final String INTERNAL_ERROR_MESSAGE = "Erro interno no servidor.";
 
@@ -37,6 +39,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleMalformedBody(HttpServletRequest request) {
         return build(HttpStatus.BAD_REQUEST, MALFORMED_BODY_MESSAGE, request);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException exception,
+                                                            HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, INVALID_PARAMETER_MESSAGE.formatted(exception.getName()), request);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
