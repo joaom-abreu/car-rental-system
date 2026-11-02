@@ -1,0 +1,28 @@
+.badge {
+  display: inline-block;
+  padding: 0 var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  border: var(--border-width) solid currentColor;
+  border-radius: var(--radius-sm);
+}
+
+.PENDING {
+  color: var(--color-warning);
+}
+
+.APPROVED {
+  color: var(--color-success);
+}
+
+.REJECTED {
+  color: var(--color-danger);
+}
+
+.CANCELLED {
+  color: var(--color-text-secondary);
+}
+
+.CONTRACTED {
+  color: var(--color-info);
+}

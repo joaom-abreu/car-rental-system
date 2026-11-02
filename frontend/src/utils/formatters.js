@@ -13,3 +13,8 @@ export function formatCurrency(value) {
 export function formatDate(instant) {
   return dateFormatter.format(new Date(instant));
 }
+
+export function formatLocalDate(date) {
+  const [year, month, day] = date.split("-");
+  return `${day}/${month}/${year}`;
+}
