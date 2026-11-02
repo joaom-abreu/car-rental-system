@@ -10,6 +10,7 @@ import dev.joaomario.carrental.model.Agent;
 import dev.joaomario.carrental.model.AgentType;
 import dev.joaomario.carrental.model.Client;
 import dev.joaomario.carrental.repository.ClientRepository;
+import dev.joaomario.carrental.repository.RentalRequestRepository;
 import dev.joaomario.carrental.repository.UserRepository;
 import dev.joaomario.carrental.security.CurrentUserProvider;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,9 @@ class ClientServiceTest {
 
     @Mock
     private CurrentUserProvider currentUserProvider;
+
+    @Mock
+    private RentalRequestRepository rentalRequestRepository;
 
     @InjectMocks
     private ClientService clientService;
@@ -150,6 +154,19 @@ class ClientServiceTest {
                 .thenReturn(List.of());
 
         assertThat(clientService.search("maria")).isEmpty();
+    }
+
+    @Test
+    void deleteClientWithRequestsThrowsBusinessRule() {
+        Client client = clientWithId(1L);
+        when(currentUserProvider.getCurrentUser()).thenReturn(client);
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        when(rentalRequestRepository.existsByClientId(1L)).thenReturn(true);
+
+        assertThatThrownBy(() -> clientService.delete(1L))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessage("Não é possível excluir um cliente que tem pedidos.");
+        verify(clientRepository, never()).delete(any());
     }
 
     private ClientCreateRequest createRequest(List<EmploymentDto> employments) {

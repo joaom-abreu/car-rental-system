@@ -12,6 +12,7 @@ import dev.joaomario.carrental.model.Employment;
 import dev.joaomario.carrental.model.Role;
 import dev.joaomario.carrental.model.User;
 import dev.joaomario.carrental.repository.ClientRepository;
+import dev.joaomario.carrental.repository.RentalRequestRepository;
 import dev.joaomario.carrental.repository.UserRepository;
 import dev.joaomario.carrental.security.CurrentUserProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,18 +36,22 @@ public class ClientService {
     private static final String TOO_MANY_EMPLOYMENTS_MESSAGE = "O cliente pode ter no máximo 3 empregos.";
     private static final String FORBIDDEN_MESSAGE = "Você só pode acessar os seus próprios dados.";
     private static final String NOT_FOUND_MESSAGE = "Cliente não encontrado.";
+    private static final String HAS_REQUESTS_MESSAGE = "Não é possível excluir um cliente que tem pedidos.";
 
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CurrentUserProvider currentUserProvider;
+    private final RentalRequestRepository rentalRequestRepository;
 
     public ClientService(ClientRepository clientRepository, UserRepository userRepository,
-                         PasswordEncoder passwordEncoder, CurrentUserProvider currentUserProvider) {
+                         PasswordEncoder passwordEncoder, CurrentUserProvider currentUserProvider,
+                         RentalRequestRepository rentalRequestRepository) {
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.currentUserProvider = currentUserProvider;
+        this.rentalRequestRepository = rentalRequestRepository;
     }
 
     @Transactional
@@ -100,7 +105,11 @@ public class ClientService {
 
     @Transactional
     public void delete(Long id) {
-        clientRepository.delete(findAccessibleClient(id));
+        Client client = findAccessibleClient(id);
+        if (rentalRequestRepository.existsByClientId(id)) {
+            throw new BusinessRuleException(HAS_REQUESTS_MESSAGE);
+        }
+        clientRepository.delete(client);
     }
 
     private Client findAccessibleClient(Long id) {

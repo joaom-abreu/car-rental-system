@@ -8,6 +8,7 @@ import dev.joaomario.carrental.model.AgentType;
 import dev.joaomario.carrental.model.Automobile;
 import dev.joaomario.carrental.model.Role;
 import dev.joaomario.carrental.repository.AutomobileRepository;
+import dev.joaomario.carrental.repository.RentalRequestRepository;
 import dev.joaomario.carrental.security.CurrentUserProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Year;
 import java.time.ZoneId;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -35,6 +37,9 @@ class AutomobileServiceTest {
 
     @Mock
     private CurrentUserProvider currentUserProvider;
+
+    @Mock
+    private RentalRequestRepository rentalRequestRepository;
 
     @InjectMocks
     private AutomobileService automobileService;
@@ -95,6 +100,19 @@ class AutomobileServiceTest {
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessage("O ano deve estar entre 1950 e %d.".formatted(NEXT_YEAR))
                 .hasFieldOrPropertyWithValue("field", "year");
+    }
+
+    @Test
+    void deleteAutomobileWithRequestsThrowsBusinessRule() {
+        Agent company = new Agent("locadora", "hash", "Locadora Savassi", AgentType.COMPANY);
+        Automobile automobile = new Automobile("LOC-0001", 2023, "Fiat", "Argo", "SAV1A23", company);
+        when(automobileRepository.findById(1L)).thenReturn(Optional.of(automobile));
+        when(rentalRequestRepository.existsByAutomobileId(1L)).thenReturn(true);
+
+        assertThatThrownBy(() -> automobileService.delete(1L))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessage("Não é possível excluir um automóvel que tem pedidos.");
+        verify(automobileRepository, never()).delete(any());
     }
 
     private AutomobileRequest request(String plate, int year) {

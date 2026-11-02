@@ -6,6 +6,7 @@ import dev.joaomario.carrental.exception.BusinessRuleException;
 import dev.joaomario.carrental.exception.NotFoundException;
 import dev.joaomario.carrental.model.Automobile;
 import dev.joaomario.carrental.repository.AutomobileRepository;
+import dev.joaomario.carrental.repository.RentalRequestRepository;
 import dev.joaomario.carrental.security.CurrentUserProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,13 +30,17 @@ public class AutomobileService {
     private static final String DUPLICATE_PLATE_MESSAGE = "Já existe um automóvel com esta placa.";
     private static final String DUPLICATE_REGISTRATION_MESSAGE = "Já existe um automóvel com esta matrícula.";
     private static final String NOT_FOUND_MESSAGE = "Automóvel não encontrado.";
+    private static final String HAS_REQUESTS_MESSAGE = "Não é possível excluir um automóvel que tem pedidos.";
 
     private final AutomobileRepository automobileRepository;
     private final CurrentUserProvider currentUserProvider;
+    private final RentalRequestRepository rentalRequestRepository;
 
-    public AutomobileService(AutomobileRepository automobileRepository, CurrentUserProvider currentUserProvider) {
+    public AutomobileService(AutomobileRepository automobileRepository, CurrentUserProvider currentUserProvider,
+                             RentalRequestRepository rentalRequestRepository) {
         this.automobileRepository = automobileRepository;
         this.currentUserProvider = currentUserProvider;
+        this.rentalRequestRepository = rentalRequestRepository;
     }
 
     @Transactional(readOnly = true)
@@ -82,7 +87,11 @@ public class AutomobileService {
 
     @Transactional
     public void delete(Long id) {
-        automobileRepository.delete(findAutomobile(id));
+        Automobile automobile = findAutomobile(id);
+        if (rentalRequestRepository.existsByAutomobileId(id)) {
+            throw new BusinessRuleException(HAS_REQUESTS_MESSAGE);
+        }
+        automobileRepository.delete(automobile);
     }
 
     private Automobile findAutomobile(Long id) {
