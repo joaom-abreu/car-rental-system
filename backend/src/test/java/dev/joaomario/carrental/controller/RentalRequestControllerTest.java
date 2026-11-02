@@ -1,6 +1,7 @@
 package dev.joaomario.carrental.controller;
 
 import dev.joaomario.carrental.exception.GlobalExceptionHandler;
+import dev.joaomario.carrental.service.ContractService;
 import dev.joaomario.carrental.service.RentalRequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,11 +25,14 @@ class RentalRequestControllerTest {
     @Mock
     private RentalRequestService rentalRequestService;
 
+    @Mock
+    private ContractService contractService;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new RentalRequestController(rentalRequestService))
+        mockMvc = MockMvcBuilders.standaloneSetup(new RentalRequestController(rentalRequestService, contractService))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }

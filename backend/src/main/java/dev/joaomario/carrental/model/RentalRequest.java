@@ -22,6 +22,7 @@ public class RentalRequest {
     private static final String NOT_EDITABLE_MESSAGE = "Só é possível modificar pedidos em análise.";
     private static final String NOT_CANCELLABLE_MESSAGE = "Só é possível cancelar pedidos em análise ou aprovados.";
     private static final String NOT_EVALUABLE_MESSAGE = "Só é possível avaliar pedidos em análise.";
+    private static final String NOT_CONTRACTABLE_MESSAGE = "Só é possível executar o contrato de pedidos aprovados.";
     private static final int OPINION_MAX_LENGTH = 500;
 
     @Id
@@ -97,6 +98,14 @@ public class RentalRequest {
             throw new BusinessRuleException(NOT_CANCELLABLE_MESSAGE);
         }
         this.status = RequestStatus.CANCELLED;
+        this.updatedAt = Instant.now();
+    }
+
+    public void markAsContracted() {
+        if (status != RequestStatus.APPROVED) {
+            throw new BusinessRuleException(NOT_CONTRACTABLE_MESSAGE);
+        }
+        this.status = RequestStatus.CONTRACTED;
         this.updatedAt = Instant.now();
     }
 

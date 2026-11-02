@@ -1,5 +1,6 @@
 package dev.joaomario.carrental.service;
 
+import dev.joaomario.carrental.dto.contract.ContractResponse;
 import dev.joaomario.carrental.dto.rentalrequest.EvaluationRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse;
@@ -47,13 +48,16 @@ public class RentalRequestService {
     private final RentalRequestRepository rentalRequestRepository;
     private final AutomobileRepository automobileRepository;
     private final CurrentUserProvider currentUserProvider;
+    private final ContractService contractService;
 
     public RentalRequestService(RentalRequestRepository rentalRequestRepository,
                                 AutomobileRepository automobileRepository,
-                                CurrentUserProvider currentUserProvider) {
+                                CurrentUserProvider currentUserProvider,
+                                ContractService contractService) {
         this.rentalRequestRepository = rentalRequestRepository;
         this.automobileRepository = automobileRepository;
         this.currentUserProvider = currentUserProvider;
+        this.contractService = contractService;
     }
 
     @Transactional
@@ -79,7 +83,7 @@ public class RentalRequestService {
 
     @Transactional(readOnly = true)
     public RentalRequestResponse findById(Long id) {
-        return toResponse(findAccessibleRequest(id));
+        return toResponse(findAccessibleRequest(id), contractService.findByRentalRequestId(id));
     }
 
     @Transactional
@@ -169,6 +173,10 @@ public class RentalRequestService {
     }
 
     private RentalRequestResponse toResponse(RentalRequest rentalRequest) {
+        return toResponse(rentalRequest, null);
+    }
+
+    private RentalRequestResponse toResponse(RentalRequest rentalRequest, ContractResponse contract) {
         Client client = rentalRequest.getClient();
         Automobile automobile = rentalRequest.getAutomobile();
         return new RentalRequestResponse(rentalRequest.getId(), rentalRequest.getStatus(),
@@ -177,7 +185,7 @@ public class RentalRequestService {
                 new ClientSummary(client.getId(), client.getName(), client.getCpf()),
                 new AutomobileSummary(automobile.getId(), automobile.getBrand(), automobile.getModel(),
                         automobile.getYear(), automobile.getPlate()),
-                toEvaluationSummary(rentalRequest));
+                toEvaluationSummary(rentalRequest), contract);
     }
 
     private EvaluationSummary toEvaluationSummary(RentalRequest rentalRequest) {

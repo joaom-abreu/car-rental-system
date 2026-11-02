@@ -95,4 +95,8 @@ public class Automobile {
     public User getOwner() {
         return owner;
     }
+
+    public void transferTo(User newOwner) {
+        this.owner = newOwner;
+    }
 }

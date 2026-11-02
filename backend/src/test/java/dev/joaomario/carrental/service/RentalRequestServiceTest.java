@@ -54,6 +54,9 @@ class RentalRequestServiceTest {
     @Mock
     private CurrentUserProvider currentUserProvider;
 
+    @Mock
+    private ContractService contractService;
+
     @InjectMocks
     private RentalRequestService rentalRequestService;
 

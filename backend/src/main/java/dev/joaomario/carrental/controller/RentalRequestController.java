@@ -1,9 +1,12 @@
 package dev.joaomario.carrental.controller;
 
+import dev.joaomario.carrental.dto.contract.ContractRequest;
+import dev.joaomario.carrental.dto.contract.ContractResponse;
 import dev.joaomario.carrental.dto.rentalrequest.EvaluationRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse;
 import dev.joaomario.carrental.model.RequestStatus;
+import dev.joaomario.carrental.service.ContractService;
 import dev.joaomario.carrental.service.RentalRequestService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,9 +28,11 @@ import java.util.List;
 public class RentalRequestController {
 
     private final RentalRequestService rentalRequestService;
+    private final ContractService contractService;
 
-    public RentalRequestController(RentalRequestService rentalRequestService) {
+    public RentalRequestController(RentalRequestService rentalRequestService, ContractService contractService) {
         this.rentalRequestService = rentalRequestService;
+        this.contractService = contractService;
     }
 
     @PostMapping
@@ -54,6 +59,12 @@ public class RentalRequestController {
     @PatchMapping("/{id}/cancel")
     public RentalRequestResponse cancel(@PathVariable Long id) {
         return rentalRequestService.cancel(id);
+    }
+
+    @PostMapping("/{id}/contract")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ContractResponse signContract(@PathVariable Long id, @Valid @RequestBody ContractRequest request) {
+        return contractService.sign(id, request);
     }
 
     @PatchMapping("/{id}/evaluation")

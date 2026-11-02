@@ -1,5 +1,6 @@
 package dev.joaomario.carrental.dto.rentalrequest;
 
+import dev.joaomario.carrental.dto.contract.ContractResponse;
 import dev.joaomario.carrental.model.RequestStatus;
 
 import java.time.Instant;
@@ -14,7 +15,8 @@ public record RentalRequestResponse(
         Instant updatedAt,
         ClientSummary client,
         AutomobileSummary automobile,
-        EvaluationSummary evaluation
+        EvaluationSummary evaluation,
+        ContractResponse contract
 ) {
 
     public record ClientSummary(Long id, String name, String cpf) {
