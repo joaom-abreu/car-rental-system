@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -79,8 +78,7 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message, HttpServletRequest request,
                                                 Map<String, String> fieldErrors) {
-        ErrorResponse body = new ErrorResponse(status.value(), status.getReasonPhrase(), message,
-                request.getRequestURI(), Instant.now(), fieldErrors);
+        ErrorResponse body = ErrorResponse.of(status, message, request.getRequestURI(), fieldErrors);
         return ResponseEntity.status(status).body(body);
     }
 }
