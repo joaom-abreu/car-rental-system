@@ -66,7 +66,9 @@ public class ClientService {
     @Transactional(readOnly = true)
     public List<ClientResponse> search(String search) {
         String term = search == null ? "" : search.trim();
-        return clientRepository.findByNameContainingIgnoreCaseOrCpfContainingOrderByNameAsc(term, term).stream()
+        String cpfDigits = onlyDigits(term);
+        String cpfTerm = cpfDigits.isEmpty() ? term : cpfDigits;
+        return clientRepository.findByNameContainingIgnoreCaseOrCpfContainingOrderByNameAsc(term, cpfTerm).stream()
                 .map(this::toResponse)
                 .toList();
     }

@@ -134,6 +134,24 @@ class ClientServiceTest {
         assertThat(response.id()).isEqualTo(2L);
     }
 
+    @Test
+    void searchWithFormattedCpfSearchesCpfByDigitsOnly() {
+        when(clientRepository.findByNameContainingIgnoreCaseOrCpfContainingOrderByNameAsc("529.982", "529982"))
+                .thenReturn(List.of(clientWithId(1L)));
+
+        List<ClientResponse> response = clientService.search(" 529.982 ");
+
+        assertThat(response).extracting(ClientResponse::id).containsExactly(1L);
+    }
+
+    @Test
+    void searchByNameKeepsSameTermForCpf() {
+        when(clientRepository.findByNameContainingIgnoreCaseOrCpfContainingOrderByNameAsc("maria", "maria"))
+                .thenReturn(List.of());
+
+        assertThat(clientService.search("maria")).isEmpty();
+    }
+
     private ClientCreateRequest createRequest(List<EmploymentDto> employments) {
         return new ClientCreateRequest("maria", "senha1234", "Maria Silva", "MG1234567", "529.982.247-25",
                 "Rua A, 1", "Professora", employments);
