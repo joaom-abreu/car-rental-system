@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Alert from "../components/Alert/Alert";
+import ClientDetails from "../components/ClientDetails/ClientDetails";
 import ClientForm from "../components/ClientForm/ClientForm";
 import { useAuth } from "../hooks/useAuth";
 import { deleteClient, getClient, updateClient } from "../services/clientService";
-import { formatCpf, formatCurrency, formatDate } from "../utils/formatters";
 import styles from "./ProfilePage.module.css";
 
 const DELETE_CONFIRMATION = "Excluir sua conta? Essa ação não pode ser desfeita.";
@@ -55,77 +55,18 @@ function ProfilePage() {
       {message && <Alert type="success">{message}</Alert>}
       {!client && !error && <p>Carregando...</p>}
       {client && editing && (
-        <>
-          <ClientForm initialValues={toFormValues(client)} submitLabel="Salvar alterações" onSubmit={handleSave} />
-          <button type="button" className={styles.secondaryButton} onClick={() => setEditing(false)}>
-            Cancelar
-          </button>
-        </>
+        <ClientForm
+          client={client}
+          submitLabel="Salvar alterações"
+          onSubmit={handleSave}
+          onCancel={() => setEditing(false)}
+        />
       )}
       {client && !editing && (
-        <>
-          <ClientDetails client={client} />
-          <div className={styles.actions}>
-            <button type="button" className={styles.primaryButton} onClick={startEditing}>
-              Editar
-            </button>
-            <button type="button" className={styles.dangerButton} onClick={handleDelete}>
-              Excluir conta
-            </button>
-          </div>
-        </>
+        <ClientDetails client={client} onEdit={startEditing} onDelete={handleDelete} deleteLabel="Excluir conta" />
       )}
     </section>
   );
-}
-
-function ClientDetails({ client }) {
-  return (
-    <div className={styles.card}>
-      <dl className={styles.details}>
-        <dt>Usuário</dt>
-        <dd>{client.username}</dd>
-        <dt>Nome</dt>
-        <dd>{client.name}</dd>
-        <dt>RG</dt>
-        <dd>{client.rg}</dd>
-        <dt>CPF</dt>
-        <dd>{formatCpf(client.cpf)}</dd>
-        <dt>Endereço</dt>
-        <dd>{client.address}</dd>
-        <dt>Profissão</dt>
-        <dd>{client.profession}</dd>
-        <dt>Cliente desde</dt>
-        <dd>{formatDate(client.createdAt)}</dd>
-      </dl>
-      <h2 className={styles.subtitle}>Empregos</h2>
-      {client.employments.length === 0 ? (
-        <p className={styles.empty}>Nenhum emprego informado.</p>
-      ) : (
-        <ul className={styles.employments}>
-          {client.employments.map((employment, index) => (
-            <li key={index}>
-              {employment.employer}: {formatCurrency(employment.income)} por mês
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
-function toFormValues(client) {
-  return {
-    name: client.name,
-    rg: client.rg,
-    cpf: client.cpf,
-    address: client.address,
-    profession: client.profession,
-    employments: client.employments.map((employment) => ({
-      employer: employment.employer,
-      income: String(employment.income),
-    })),
-  };
 }
 
 export default ProfilePage;

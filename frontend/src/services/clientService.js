@@ -15,3 +15,7 @@ export function updateClient(id, client) {
 export function deleteClient(id) {
   return request(`/api/clients/${id}`, { method: "DELETE" });
 }
+
+export function searchClients(search) {
+  return request(`/api/clients?search=${encodeURIComponent(search)}`);
+}

@@ -27,8 +27,8 @@ const PERSONAL_FIELDS = [
   { name: "profession", label: "Profissão" },
 ];
 
-function ClientForm({ initialValues = EMPTY_CLIENT, withCredentials = false, submitLabel, onSubmit }) {
-  const [form, setForm] = useState(initialValues);
+function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabel, onSubmit, onCancel }) {
+  const [form, setForm] = useState(() => toFormValues(client));
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -84,8 +84,28 @@ function ClientForm({ initialValues = EMPTY_CLIENT, withCredentials = false, sub
       <button type="submit" className={styles.submit} disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
       </button>
+      {onCancel && (
+        <button type="button" className={styles.cancel} onClick={onCancel}>
+          Cancelar
+        </button>
+      )}
     </form>
   );
+}
+
+function toFormValues(client) {
+  return {
+    ...EMPTY_CLIENT,
+    name: client.name,
+    rg: client.rg,
+    cpf: client.cpf,
+    address: client.address,
+    profession: client.profession,
+    employments: client.employments.map((employment) => ({
+      employer: employment.employer,
+      income: String(employment.income),
+    })),
+  };
 }
 
 function toPayload(form, withCredentials) {
