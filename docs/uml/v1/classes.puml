@@ -1,0 +1,124 @@
+@startuml classes
+title Sistema de Aluguel de Carros — Diagrama de Classes (v1)
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 13
+hide empty members
+set separator none
+skinparam nodesep 70
+skinparam ranksep 70
+
+package dev.joaomario.carrental.model {
+
+  abstract class User {
+    - id: Long
+    - username: String
+    - passwordHash: String
+    - name: String
+    - createdAt: Instant
+    + {abstract} getRole(): Role
+  }
+
+  class Client {
+    - rg: String
+    - cpf: String
+    - address: String
+    - profession: String
+    + getRole(): Role
+  }
+
+  class Employment <<Embeddable>> {
+    - employer: String
+    - income: BigDecimal
+  }
+
+  class Agent {
+    - type: AgentType
+    + getRole(): Role
+    + isBank(): boolean
+  }
+
+  class Automobile {
+    - id: Long
+    - registration: String
+    - year: int
+    - brand: String
+    - model: String
+    - plate: String
+    + transferTo(newOwner: User): void
+  }
+
+  class RentalRequest {
+    - id: Long
+    - startDate: LocalDate
+    - endDate: LocalDate
+    - status: RequestStatus
+    - createdAt: Instant
+    - updatedAt: Instant
+    - evaluationOpinion: String
+    - evaluatedAt: Instant
+    + update(automobile: Automobile, startDate: LocalDate, endDate: LocalDate): void
+    + approve(agent: Agent, opinion: String): void
+    + reject(agent: Agent, opinion: String): void
+    + cancel(): void
+    + markAsContracted(): void
+    + belongsTo(user: User): boolean
+  }
+
+  class Contract {
+    - id: Long
+    - ownershipType: OwnershipType
+    - signedAt: Instant
+  }
+
+  class CreditContract {
+    - id: Long
+    - amount: BigDecimal
+    - monthlyInterestRate: BigDecimal
+    - installments: int
+  }
+
+  enum Role {
+    CLIENT
+    AGENT
+  }
+
+  enum AgentType {
+    COMPANY
+    BANK
+  }
+
+  enum RequestStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    CANCELLED
+    CONTRACTED
+  }
+
+  enum OwnershipType {
+    CLIENT
+    COMPANY
+    BANK
+  }
+
+  User <|-- Client
+  User <|-- Agent
+
+  Client "1" *-- "0..3" Employment : employments
+  Automobile "0..*" --> "1" User : owner
+
+  RentalRequest "0..*" --> "1" Client : client
+  RentalRequest "0..*" --> "1" Automobile : automobile
+  RentalRequest "0..*" --> "0..1" Agent : evaluatedBy
+
+  Contract "0..1" --> "1" RentalRequest : rentalRequest
+  Contract "0..*" --> "1" Agent : signedBy
+  Contract "1" --> "0..1" CreditContract : creditContract
+  CreditContract "0..*" --> "1" Agent : bank
+
+  Role -[hidden]- AgentType
+  AgentType -[hidden]- RequestStatus
+  RequestStatus -[hidden]- OwnershipType
+}
+@enduml
