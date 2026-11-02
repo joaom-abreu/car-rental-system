@@ -4,8 +4,8 @@ import styles from "./RequestForm.module.css";
 
 const EMPTY_REQUEST = { automobileId: "", startDate: "", endDate: "" };
 
-function RequestForm({ automobiles, submitLabel, onSubmit }) {
-  const [form, setForm] = useState(EMPTY_REQUEST);
+function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCancel }) {
+  const [form, setForm] = useState(() => (rentalRequest ? toFormValues(rentalRequest) : EMPTY_REQUEST));
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -77,8 +77,21 @@ function RequestForm({ automobiles, submitLabel, onSubmit }) {
       <button type="submit" className={styles.submit} disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
       </button>
+      {onCancel && (
+        <button type="button" className={styles.cancel} onClick={onCancel}>
+          Cancelar
+        </button>
+      )}
     </form>
   );
+}
+
+function toFormValues(rentalRequest) {
+  return {
+    automobileId: String(rentalRequest.automobile.id),
+    startDate: rentalRequest.startDate,
+    endDate: rentalRequest.endDate,
+  };
 }
 
 function toPayload(form) {
