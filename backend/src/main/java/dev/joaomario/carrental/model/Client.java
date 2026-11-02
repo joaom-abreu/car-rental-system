@@ -52,19 +52,40 @@ public class Client extends User {
         return rg;
     }
 
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
     public String getCpf() {
         return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getAddress() {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getProfession() {
         return profession;
     }
 
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
     public List<Employment> getEmployments() {
         return employments;
+    }
+
+    public void setEmployments(List<Employment> employments) {
+        this.employments.clear();
+        this.employments.addAll(employments);
     }
 }
