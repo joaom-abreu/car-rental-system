@@ -1,12 +1,15 @@
 package dev.joaomario.carrental.service;
 
+import dev.joaomario.carrental.dto.rentalrequest.EvaluationRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse.AutomobileSummary;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse.ClientSummary;
+import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse.EvaluationSummary;
 import dev.joaomario.carrental.exception.BusinessRuleException;
 import dev.joaomario.carrental.exception.ForbiddenException;
 import dev.joaomario.carrental.exception.NotFoundException;
+import dev.joaomario.carrental.model.Agent;
 import dev.joaomario.carrental.model.Automobile;
 import dev.joaomario.carrental.model.Client;
 import dev.joaomario.carrental.model.RentalRequest;
@@ -36,6 +39,7 @@ public class RentalRequestService {
     private static final String AUTOMOBILE_NOT_FOUND_MESSAGE = "Automóvel não encontrado.";
     private static final String FORBIDDEN_MESSAGE = "Você só pode acessar os seus próprios pedidos.";
     private static final String ONLY_CLIENTS_MESSAGE = "Só clientes podem criar pedidos.";
+    private static final String ONLY_AGENTS_MESSAGE = "Só agentes podem avaliar pedidos.";
     private static final String PAST_START_MESSAGE = "A data de início não pode ser anterior a hoje.";
     private static final String END_BEFORE_START_MESSAGE = "A data de fim deve ser depois da data de início.";
     private static final String OVERLAP_MESSAGE = "Este automóvel já está reservado nesse período.";
@@ -97,11 +101,34 @@ public class RentalRequestService {
         return toResponse(rentalRequest);
     }
 
+    @Transactional
+    public RentalRequestResponse evaluate(Long id, EvaluationRequest request) {
+        Agent agent = currentAgent();
+        RentalRequest rentalRequest = findRequest(id);
+        if (!request.approved()) {
+            rentalRequest.reject(agent, request.opinion());
+            return toResponse(rentalRequest);
+        }
+        if (rentalRequest.getStatus() == RequestStatus.PENDING) {
+            checkAvailability(rentalRequest.getAutomobile(), rentalRequest.getStartDate(),
+                    rentalRequest.getEndDate());
+        }
+        rentalRequest.approve(agent, request.opinion());
+        return toResponse(rentalRequest);
+    }
+
     private Client currentClient() {
         if (currentUserProvider.getCurrentUser() instanceof Client client) {
             return client;
         }
         throw new ForbiddenException(ONLY_CLIENTS_MESSAGE);
+    }
+
+    private Agent currentAgent() {
+        if (currentUserProvider.getCurrentUser() instanceof Agent agent) {
+            return agent;
+        }
+        throw new ForbiddenException(ONLY_AGENTS_MESSAGE);
     }
 
     private RentalRequest findRequest(Long id) {
@@ -130,6 +157,10 @@ public class RentalRequestService {
         if (!endDate.isAfter(startDate)) {
             throw new BusinessRuleException(END_BEFORE_START_MESSAGE, END_DATE_FIELD);
         }
+        checkAvailability(automobile, startDate, endDate);
+    }
+
+    private void checkAvailability(Automobile automobile, LocalDate startDate, LocalDate endDate) {
         if (rentalRequestRepository.existsOverlapping(automobile.getId(), BLOCKING_STATUSES, startDate, endDate)) {
             throw new BusinessRuleException(OVERLAP_MESSAGE, AUTOMOBILE_FIELD);
         }
@@ -143,6 +174,15 @@ public class RentalRequestService {
                 rentalRequest.getUpdatedAt(),
                 new ClientSummary(client.getId(), client.getName(), client.getCpf()),
                 new AutomobileSummary(automobile.getId(), automobile.getBrand(), automobile.getModel(),
-                        automobile.getYear(), automobile.getPlate()));
+                        automobile.getYear(), automobile.getPlate()),
+                toEvaluationSummary(rentalRequest));
+    }
+
+    private EvaluationSummary toEvaluationSummary(RentalRequest rentalRequest) {
+        if (rentalRequest.getEvaluatedBy() == null) {
+            return null;
+        }
+        return new EvaluationSummary(rentalRequest.getEvaluatedBy().getName(),
+                rentalRequest.getEvaluationOpinion(), rentalRequest.getEvaluatedAt());
     }
 }

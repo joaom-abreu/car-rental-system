@@ -21,6 +21,8 @@ public class RentalRequest {
 
     private static final String NOT_EDITABLE_MESSAGE = "Só é possível modificar pedidos em análise.";
     private static final String NOT_CANCELLABLE_MESSAGE = "Só é possível cancelar pedidos em análise ou aprovados.";
+    private static final String NOT_EVALUABLE_MESSAGE = "Só é possível avaliar pedidos em análise.";
+    private static final int OPINION_MAX_LENGTH = 500;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +52,15 @@ public class RentalRequest {
     @Column(nullable = false)
     private Instant updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "evaluated_by_id")
+    private Agent evaluatedBy;
+
+    @Column(length = OPINION_MAX_LENGTH)
+    private String evaluationOpinion;
+
+    private Instant evaluatedAt;
+
     protected RentalRequest() {
     }
 
@@ -73,6 +84,14 @@ public class RentalRequest {
         this.updatedAt = Instant.now();
     }
 
+    public void approve(Agent agent, String opinion) {
+        evaluate(agent, opinion, RequestStatus.APPROVED);
+    }
+
+    public void reject(Agent agent, String opinion) {
+        evaluate(agent, opinion, RequestStatus.REJECTED);
+    }
+
     public void cancel() {
         if (status != RequestStatus.PENDING && status != RequestStatus.APPROVED) {
             throw new BusinessRuleException(NOT_CANCELLABLE_MESSAGE);
@@ -83,6 +102,17 @@ public class RentalRequest {
 
     public boolean belongsTo(User user) {
         return client.getId().equals(user.getId());
+    }
+
+    private void evaluate(Agent agent, String opinion, RequestStatus newStatus) {
+        if (status != RequestStatus.PENDING) {
+            throw new BusinessRuleException(NOT_EVALUABLE_MESSAGE);
+        }
+        this.status = newStatus;
+        this.evaluatedBy = agent;
+        this.evaluationOpinion = opinion;
+        this.evaluatedAt = Instant.now();
+        this.updatedAt = evaluatedAt;
     }
 
     public Long getId() {
@@ -115,5 +145,17 @@ public class RentalRequest {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public Agent getEvaluatedBy() {
+        return evaluatedBy;
+    }
+
+    public String getEvaluationOpinion() {
+        return evaluationOpinion;
+    }
+
+    public Instant getEvaluatedAt() {
+        return evaluatedAt;
     }
 }

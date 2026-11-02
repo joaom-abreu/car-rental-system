@@ -1,5 +1,6 @@
 package dev.joaomario.carrental.service;
 
+import dev.joaomario.carrental.dto.rentalrequest.EvaluationRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse;
 import dev.joaomario.carrental.exception.BusinessRuleException;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -57,6 +60,7 @@ class RentalRequestServiceTest {
     private final Client owner = client(1L, "Maria Silva", "52998224725");
     private final Client otherClient = client(2L, "João Souza", "11144477735");
     private final Agent company = new Agent("locadora", "hash", "Locadora Savassi", AgentType.COMPANY);
+    private final Agent bank = new Agent("banco", "hash", "Banco Pampulha", AgentType.BANK);
     private final Automobile automobile = automobile();
 
     @Test
@@ -193,6 +197,67 @@ class RentalRequestServiceTest {
         List<RentalRequestResponse> response = rentalRequestService.list(RequestStatus.CANCELLED);
 
         assertThat(response).extracting(RentalRequestResponse::status).containsExactly(RequestStatus.CANCELLED);
+    }
+
+    @Test
+    void approvePendingRequestSetsApprovedWithEvaluation() {
+        when(currentUserProvider.getCurrentUser()).thenReturn(bank);
+        when(rentalRequestRepository.findById(REQUEST_ID)).thenReturn(Optional.of(requestWithStatus(RequestStatus.PENDING)));
+
+        RentalRequestResponse response = rentalRequestService.evaluate(REQUEST_ID,
+                new EvaluationRequest(true, "Renda compatível com o valor."));
+
+        assertThat(response.status()).isEqualTo(RequestStatus.APPROVED);
+        assertThat(response.evaluation().agentName()).isEqualTo("Banco Pampulha");
+        assertThat(response.evaluation().opinion()).isEqualTo("Renda compatível com o valor.");
+        assertThat(response.evaluation().evaluatedAt()).isNotNull();
+    }
+
+    @Test
+    void rejectPendingRequestSetsRejectedWithoutCheckingOverlap() {
+        when(currentUserProvider.getCurrentUser()).thenReturn(company);
+        when(rentalRequestRepository.findById(REQUEST_ID)).thenReturn(Optional.of(requestWithStatus(RequestStatus.PENDING)));
+
+        RentalRequestResponse response = rentalRequestService.evaluate(REQUEST_ID,
+                new EvaluationRequest(false, "Renda insuficiente."));
+
+        assertThat(response.status()).isEqualTo(RequestStatus.REJECTED);
+        assertThat(response.evaluation().agentName()).isEqualTo("Locadora Savassi");
+        verify(rentalRequestRepository, never()).existsOverlapping(anyLong(), anyList(), any(), any());
+    }
+
+    @Test
+    void evaluateAlreadyEvaluatedRequestThrowsBusinessRule() {
+        when(currentUserProvider.getCurrentUser()).thenReturn(bank);
+        when(rentalRequestRepository.findById(REQUEST_ID)).thenReturn(Optional.of(requestWithStatus(RequestStatus.APPROVED)));
+
+        assertThatThrownBy(() -> rentalRequestService.evaluate(REQUEST_ID,
+                new EvaluationRequest(true, "Aprovando de novo.")))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessage("Só é possível avaliar pedidos em análise.");
+    }
+
+    @Test
+    void approveWithOverlappingRequestThrowsBusinessRuleAndKeepsPending() {
+        RentalRequest rentalRequest = requestWithStatus(RequestStatus.PENDING);
+        when(currentUserProvider.getCurrentUser()).thenReturn(bank);
+        when(rentalRequestRepository.findById(REQUEST_ID)).thenReturn(Optional.of(rentalRequest));
+        when(rentalRequestRepository.existsOverlapping(eq(AUTOMOBILE_ID), anyList(), eq(START), eq(END)))
+                .thenReturn(true);
+
+        assertThatThrownBy(() -> rentalRequestService.evaluate(REQUEST_ID,
+                new EvaluationRequest(true, "Renda compatível.")))
+                .isInstanceOf(BusinessRuleException.class)
+                .hasMessage("Este automóvel já está reservado nesse período.");
+        assertThat(rentalRequest.getStatus()).isEqualTo(RequestStatus.PENDING);
+    }
+
+    @Test
+    void responseOfNotEvaluatedRequestHasNullEvaluation() {
+        when(rentalRequestRepository.findById(REQUEST_ID)).thenReturn(Optional.of(requestWithStatus(RequestStatus.PENDING)));
+        when(currentUserProvider.getCurrentUser()).thenReturn(owner);
+
+        assertThat(rentalRequestService.findById(REQUEST_ID).evaluation()).isNull();
     }
 
     private RentalRequest requestWithStatus(RequestStatus status) {

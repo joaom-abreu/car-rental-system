@@ -1,5 +1,6 @@
 package dev.joaomario.carrental.controller;
 
+import dev.joaomario.carrental.dto.rentalrequest.EvaluationRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestRequest;
 import dev.joaomario.carrental.dto.rentalrequest.RentalRequestResponse;
 import dev.joaomario.carrental.model.RequestStatus;
@@ -53,5 +54,10 @@ public class RentalRequestController {
     @PatchMapping("/{id}/cancel")
     public RentalRequestResponse cancel(@PathVariable Long id) {
         return rentalRequestService.cancel(id);
+    }
+
+    @PatchMapping("/{id}/evaluation")
+    public RentalRequestResponse evaluate(@PathVariable Long id, @Valid @RequestBody EvaluationRequest request) {
+        return rentalRequestService.evaluate(id, request);
     }
 }

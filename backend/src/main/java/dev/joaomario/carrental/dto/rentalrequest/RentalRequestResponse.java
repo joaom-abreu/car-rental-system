@@ -13,12 +13,16 @@ public record RentalRequestResponse(
         Instant createdAt,
         Instant updatedAt,
         ClientSummary client,
-        AutomobileSummary automobile
+        AutomobileSummary automobile,
+        EvaluationSummary evaluation
 ) {
 
     public record ClientSummary(Long id, String name, String cpf) {
     }
 
     public record AutomobileSummary(Long id, String brand, String model, int year, String plate) {
+    }
+
+    public record EvaluationSummary(String agentName, String opinion, Instant evaluatedAt) {
     }
 }
