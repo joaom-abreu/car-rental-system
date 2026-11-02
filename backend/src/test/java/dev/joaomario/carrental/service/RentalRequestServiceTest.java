@@ -130,7 +130,7 @@ class RentalRequestServiceTest {
     }
 
     @Test
-    void updateOutsidePendingThrowsBusinessRule() {
+    void updateOutsidePendingThrowsStatusMessageWithoutCheckingOverlap() {
         when(rentalRequestRepository.findById(REQUEST_ID)).thenReturn(Optional.of(requestWithStatus(RequestStatus.APPROVED)));
         when(currentUserProvider.getCurrentUser()).thenReturn(owner);
         when(automobileRepository.findById(AUTOMOBILE_ID)).thenReturn(Optional.of(automobile));
@@ -139,6 +139,7 @@ class RentalRequestServiceTest {
                 new RentalRequestRequest(AUTOMOBILE_ID, START, END.plusDays(1))))
                 .isInstanceOf(BusinessRuleException.class)
                 .hasMessage("Só é possível modificar pedidos em análise.");
+        verify(rentalRequestRepository, never()).existsOverlapping(anyLong(), anyList(), any(), any());
     }
 
     @Test

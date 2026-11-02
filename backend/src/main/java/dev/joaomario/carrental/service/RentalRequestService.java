@@ -86,7 +86,9 @@ public class RentalRequestService {
     public RentalRequestResponse update(Long id, RentalRequestRequest request) {
         RentalRequest rentalRequest = findAccessibleRequest(id);
         Automobile automobile = findAutomobile(request.automobileId());
-        validatePeriod(automobile, request.startDate(), request.endDate());
+        if (rentalRequest.getStatus() == RequestStatus.PENDING) {
+            validatePeriod(automobile, request.startDate(), request.endDate());
+        }
         rentalRequest.update(automobile, request.startDate(), request.endDate());
         return toResponse(rentalRequest);
     }
