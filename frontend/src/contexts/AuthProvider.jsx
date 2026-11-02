@@ -16,6 +16,12 @@ function AuthProvider({ children }) {
     setSession(newSession);
   }
 
+  function updateUser(changes) {
+    const newSession = { ...session, user: { ...session.user, ...changes } };
+    saveSession(newSession);
+    setSession(newSession);
+  }
+
   function logout() {
     clearSession();
     setSession(null);
@@ -30,6 +36,7 @@ function AuthProvider({ children }) {
     isBank: user?.agentType === AGENT_TYPE_BANK,
     login,
     logout,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
