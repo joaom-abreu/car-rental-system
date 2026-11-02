@@ -69,7 +69,8 @@ class ClientServiceTest {
 
         assertThatThrownBy(() -> clientService.create(createRequest(List.of())))
                 .isInstanceOf(BusinessRuleException.class)
-                .hasMessage("Este usuário já está em uso.");
+                .hasMessage("Este usuário já está em uso.")
+                .hasFieldOrPropertyWithValue("field", "username");
         verify(clientRepository, never()).save(any());
     }
 
@@ -79,7 +80,8 @@ class ClientServiceTest {
 
         assertThatThrownBy(() -> clientService.create(createRequest(List.of())))
                 .isInstanceOf(BusinessRuleException.class)
-                .hasMessage("Já existe um cliente com este CPF.");
+                .hasMessage("Já existe um cliente com este CPF.")
+                .hasFieldOrPropertyWithValue("field", "cpf");
         verify(clientRepository, never()).save(any());
     }
 
@@ -89,7 +91,8 @@ class ClientServiceTest {
 
         assertThatThrownBy(() -> clientService.create(createRequest(fourEmployments)))
                 .isInstanceOf(BusinessRuleException.class)
-                .hasMessage("O cliente pode ter no máximo 3 empregos.");
+                .hasMessage("O cliente pode ter no máximo 3 empregos.")
+                .hasFieldOrPropertyWithValue("field", "employments");
         verify(clientRepository, never()).save(any());
     }
 

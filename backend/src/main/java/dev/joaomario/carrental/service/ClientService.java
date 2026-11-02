@@ -25,6 +25,10 @@ public class ClientService {
 
     private static final int MAX_EMPLOYMENTS = 3;
     private static final String NON_DIGITS = "\\D";
+    private static final String USERNAME_FIELD = "username";
+    private static final String CPF_FIELD = "cpf";
+    private static final String RG_FIELD = "rg";
+    private static final String EMPLOYMENTS_FIELD = "employments";
     private static final String DUPLICATE_USERNAME_MESSAGE = "Este usuário já está em uso.";
     private static final String DUPLICATE_CPF_MESSAGE = "Já existe um cliente com este CPF.";
     private static final String DUPLICATE_RG_MESSAGE = "Já existe um cliente com este RG.";
@@ -49,7 +53,7 @@ public class ClientService {
     public ClientResponse create(ClientCreateRequest request) {
         String cpf = onlyDigits(request.cpf());
         if (userRepository.existsByUsername(request.username())) {
-            throw new BusinessRuleException(DUPLICATE_USERNAME_MESSAGE);
+            throw new BusinessRuleException(DUPLICATE_USERNAME_MESSAGE, USERNAME_FIELD);
         }
         checkCpfAvailable(cpf);
         checkRgAvailable(request.rg());
@@ -108,19 +112,19 @@ public class ClientService {
 
     private void checkCpfAvailable(String cpf) {
         if (clientRepository.existsByCpf(cpf)) {
-            throw new BusinessRuleException(DUPLICATE_CPF_MESSAGE);
+            throw new BusinessRuleException(DUPLICATE_CPF_MESSAGE, CPF_FIELD);
         }
     }
 
     private void checkRgAvailable(String rg) {
         if (clientRepository.existsByRg(rg)) {
-            throw new BusinessRuleException(DUPLICATE_RG_MESSAGE);
+            throw new BusinessRuleException(DUPLICATE_RG_MESSAGE, RG_FIELD);
         }
     }
 
     private void checkEmploymentLimit(List<EmploymentDto> employments) {
         if (employments.size() > MAX_EMPLOYMENTS) {
-            throw new BusinessRuleException(TOO_MANY_EMPLOYMENTS_MESSAGE);
+            throw new BusinessRuleException(TOO_MANY_EMPLOYMENTS_MESSAGE, EMPLOYMENTS_FIELD);
         }
     }
 

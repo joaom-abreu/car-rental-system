@@ -63,7 +63,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessRuleException.class)
     public ResponseEntity<ErrorResponse> handleBusinessRule(BusinessRuleException exception,
                                                             HttpServletRequest request) {
-        return build(HttpStatus.CONFLICT, exception.getMessage(), request);
+        Map<String, String> fieldErrors = exception.getField() == null
+                ? Map.of()
+                : Map.of(exception.getField(), exception.getMessage());
+        return build(HttpStatus.CONFLICT, exception.getMessage(), request, fieldErrors);
     }
 
     @ExceptionHandler(Exception.class)

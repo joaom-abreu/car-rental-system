@@ -55,7 +55,16 @@ class GlobalExceptionHandlerTest {
     void businessRuleExceptionReturns409() throws Exception {
         mockMvc.perform(get("/test/business-rule"))
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.message").value("Já existe um cliente com este CPF."));
+                .andExpect(jsonPath("$.message").value("Já existe um cliente com este CPF."))
+                .andExpect(jsonPath("$.fieldErrors", anEmptyMap()));
+    }
+
+    @Test
+    void businessRuleExceptionWithFieldReturns409WithFieldError() throws Exception {
+        mockMvc.perform(get("/test/business-rule-field"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Já existe um cliente com este CPF."))
+                .andExpect(jsonPath("$.fieldErrors.cpf").value("Já existe um cliente com este CPF."));
     }
 
     @Test
@@ -116,6 +125,11 @@ class GlobalExceptionHandlerTest {
         @GetMapping("/test/business-rule")
         void businessRule() {
             throw new BusinessRuleException("Já existe um cliente com este CPF.");
+        }
+
+        @GetMapping("/test/business-rule-field")
+        void businessRuleWithField() {
+            throw new BusinessRuleException("Já existe um cliente com este CPF.", "cpf");
         }
 
         @GetMapping("/test/forbidden")
