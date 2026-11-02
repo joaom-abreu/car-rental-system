@@ -20,3 +20,7 @@ export function updateRentalRequest(id, rentalRequest) {
 export function cancelRentalRequest(id) {
   return request(`/api/rental-requests/${id}/cancel`, { method: "PATCH" });
 }
+
+export function evaluateRentalRequest(id, evaluation) {
+  return request(`/api/rental-requests/${id}/evaluation`, { method: "PATCH", body: evaluation });
+}

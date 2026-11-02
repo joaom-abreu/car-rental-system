@@ -38,6 +38,15 @@
   margin-bottom: 0;
 }
 
+.opinion {
+  white-space: pre-line;
+}
+
+.empty {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
 .details dt {
   color: var(--color-text-secondary);
 }

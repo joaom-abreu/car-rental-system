@@ -1,31 +1,43 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
+import EvaluationForm from "../components/EvaluationForm/EvaluationForm";
 import RequestForm from "../components/RequestForm/RequestForm";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import { useAuth } from "../hooks/useAuth";
 import { getAutomobiles } from "../services/automobileService";
-import { cancelRentalRequest, getRentalRequest, updateRentalRequest } from "../services/rentalRequestService";
+import {
+  cancelRentalRequest,
+  evaluateRentalRequest,
+  getRentalRequest,
+  updateRentalRequest,
+} from "../services/rentalRequestService";
 import { formatCpf, formatDate, formatLocalDate } from "../utils/formatters";
 import styles from "./RequestDetailPage.module.css";
 
-const EDITABLE_STATUS = "PENDING";
+const PENDING_STATUS = "PENDING";
 const CANCELLABLE_STATUSES = ["PENDING", "APPROVED"];
 const CANCEL_CONFIRMATION = "Cancelar este pedido? Essa ação não pode ser desfeita.";
 const UPDATED_MESSAGE = "Pedido atualizado.";
 const CANCELLED_MESSAGE = "Pedido cancelado.";
+const APPROVED_MESSAGE = "Pedido aprovado.";
+const REJECTED_MESSAGE = "Pedido reprovado.";
 
 function canEdit(rentalRequest) {
-  return rentalRequest.status === EDITABLE_STATUS;
+  return rentalRequest.status === PENDING_STATUS;
 }
 
 function canCancel(rentalRequest, isClient) {
   return isClient && CANCELLABLE_STATUSES.includes(rentalRequest.status);
 }
 
+function canEvaluate(rentalRequest, isAgent) {
+  return isAgent && rentalRequest.status === PENDING_STATUS;
+}
+
 function RequestDetailPage() {
   const { id } = useParams();
-  const { isClient } = useAuth();
+  const { isClient, isAgent } = useAuth();
   const [rentalRequest, setRentalRequest] = useState(null);
   const [automobiles, setAutomobiles] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -37,6 +49,13 @@ function RequestDetailPage() {
       .then(setRentalRequest)
       .catch((requestError) => setError(requestError.message));
   }, [id]);
+
+  async function handleEvaluate(evaluation) {
+    setMessage("");
+    setError("");
+    setRentalRequest(await evaluateRentalRequest(id, evaluation));
+    setMessage(evaluation.approved ? APPROVED_MESSAGE : REJECTED_MESSAGE);
+  }
 
   function startEditing() {
     setMessage("");
@@ -105,6 +124,7 @@ function RequestDetailPage() {
               </button>
             )}
           </div>
+          {canEvaluate(rentalRequest, isAgent) && <EvaluationForm onEvaluate={handleEvaluate} />}
         </>
       )}
     </section>
@@ -112,7 +132,7 @@ function RequestDetailPage() {
 }
 
 function RequestDetails({ rentalRequest }) {
-  const { client, automobile } = rentalRequest;
+  const { client, automobile, evaluation } = rentalRequest;
   return (
     <div className={styles.card}>
       <h2 className={styles.subtitle}>Pedido</h2>
@@ -142,6 +162,19 @@ function RequestDetails({ rentalRequest }) {
         <dt>Placa</dt>
         <dd>{automobile.plate}</dd>
       </dl>
+      <h2 className={styles.subtitle}>Avaliação</h2>
+      {evaluation ? (
+        <dl className={styles.details}>
+          <dt>Avaliado por</dt>
+          <dd>{evaluation.agentName}</dd>
+          <dt>Data</dt>
+          <dd>{formatDate(evaluation.evaluatedAt)}</dd>
+          <dt>Parecer</dt>
+          <dd className={styles.opinion}>{evaluation.opinion}</dd>
+        </dl>
+      ) : (
+        <p className={styles.empty}>Este pedido ainda não foi avaliado.</p>
+      )}
     </div>
   );
 }
