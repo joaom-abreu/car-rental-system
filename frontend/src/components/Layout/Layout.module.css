@@ -49,3 +49,26 @@
   margin: 0 auto;
   padding: var(--space-lg) var(--space-md);
 }
+
+.userArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.userName {
+  color: var(--color-text-secondary);
+}
+
+.logoutButton {
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.logoutButton:hover {
+  border-color: var(--color-text-secondary);
+}

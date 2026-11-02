@@ -1,20 +1,38 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import styles from "./Layout.module.css";
 
-const NAV_LINKS = [
-  { to: "/pedidos", label: "Pedidos" },
-  { to: "/automoveis", label: "Automóveis" },
-  { to: "/clientes", label: "Clientes" },
-  { to: "/perfil", label: "Perfil" },
+const GUEST_LINKS = [
   { to: "/login", label: "Entrar" },
   { to: "/cadastro", label: "Cadastre-se" },
 ];
+const COMMON_LINKS = [
+  { to: "/pedidos", label: "Pedidos" },
+  { to: "/automoveis", label: "Automóveis" },
+];
+const AGENT_LINKS = [{ to: "/clientes", label: "Clientes" }];
+const CLIENT_LINKS = [{ to: "/perfil", label: "Perfil" }];
+
+function getNavLinks(user, isAgent) {
+  if (!user) {
+    return GUEST_LINKS;
+  }
+  return [...COMMON_LINKS, ...(isAgent ? AGENT_LINKS : CLIENT_LINKS)];
+}
 
 function navLinkClass({ isActive }) {
   return isActive ? `${styles.navLink} ${styles.active}` : styles.navLink;
 }
 
 function Layout() {
+  const { user, isAgent, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
+
   return (
     <>
       <header className={styles.header}>
@@ -24,7 +42,7 @@ function Layout() {
           </Link>
           <nav aria-label="Navegação principal">
             <ul className={styles.navList}>
-              {NAV_LINKS.map((link) => (
+              {getNavLinks(user, isAgent).map((link) => (
                 <li key={link.to}>
                   <NavLink to={link.to} className={navLinkClass}>
                     {link.label}
@@ -33,6 +51,14 @@ function Layout() {
               ))}
             </ul>
           </nav>
+          {user && (
+            <div className={styles.userArea}>
+              <span className={styles.userName}>{user.name}</span>
+              <button type="button" className={styles.logoutButton} onClick={handleLogout}>
+                Sair
+              </button>
+            </div>
+          )}
         </div>
       </header>
       <main className={styles.main}>

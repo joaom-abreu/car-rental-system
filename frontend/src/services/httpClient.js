@@ -1,12 +1,15 @@
 import API_CONFIG from "../config/apiConfig";
+import { clearSession, loadSession } from "./authStorage";
 
 const NO_CONTENT_STATUS = 204;
+const UNAUTHORIZED_STATUS = 401;
+const LOGIN_PATH = "/login";
 const CONNECTION_ERROR_MESSAGE = "Não foi possível conectar ao servidor. Tente novamente em instantes.";
 
 export async function request(path, { method = "GET", body } = {}) {
-  const options = { method };
+  const session = loadSession();
+  const options = { method, headers: buildHeaders(session, body) };
   if (body !== undefined) {
-    options.headers = { "Content-Type": "application/json" };
     options.body = JSON.stringify(body);
   }
 
@@ -15,6 +18,11 @@ export async function request(path, { method = "GET", body } = {}) {
     response = await fetch(`${API_CONFIG.BASE_URL}${path}`, options);
   } catch {
     throw new Error(CONNECTION_ERROR_MESSAGE);
+  }
+
+  if (response.status === UNAUTHORIZED_STATUS && session) {
+    clearSession();
+    window.location.assign(LOGIN_PATH);
   }
 
   if (response.status === NO_CONTENT_STATUS) {
@@ -26,6 +34,17 @@ export async function request(path, { method = "GET", body } = {}) {
     throw createApiError(response.status, data);
   }
   return data;
+}
+
+function buildHeaders(session, body) {
+  const headers = {};
+  if (body !== undefined) {
+    headers["Content-Type"] = "application/json";
+  }
+  if (session) {
+    headers.Authorization = `Bearer ${session.token}`;
+  }
+  return headers;
 }
 
 function createApiError(status, data) {
