@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
 import { useAuth } from "../hooks/useAuth";
 import styles from "./LoginPage.module.css";
@@ -8,6 +8,8 @@ const INITIAL_FORM = { username: "", password: "" };
 
 function LoginPage() {
   const { user, login } = useAuth();
+  const location = useLocation();
+  const successMessage = location.state?.successMessage;
   const [form, setForm] = useState(INITIAL_FORM);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
@@ -39,6 +41,7 @@ function LoginPage() {
   return (
     <section className={styles.page}>
       <h1>Entrar</h1>
+      {successMessage && !error && <Alert type="success">{successMessage}</Alert>}
       {error && <Alert type="error">{error}</Alert>}
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.field}>
@@ -70,6 +73,9 @@ function LoginPage() {
           {submitting ? "Entrando..." : "Entrar"}
         </button>
       </form>
+      <p className={styles.signUpLink}>
+        Ainda não tem conta? <Link to="/cadastro">Criar conta</Link>
+      </p>
     </section>
   );
 }

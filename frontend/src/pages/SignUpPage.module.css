@@ -1,0 +1,9 @@
+.page {
+  max-width: var(--form-wide-max-width);
+  margin: 0 auto;
+}
+
+.loginLink {
+  margin-top: var(--space-md);
+  text-align: center;
+}

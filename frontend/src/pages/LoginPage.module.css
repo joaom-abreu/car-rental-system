@@ -48,3 +48,8 @@
   opacity: 0.7;
   cursor: wait;
 }
+
+.signUpLink {
+  margin-top: var(--space-md);
+  text-align: center;
+}
