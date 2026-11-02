@@ -1,0 +1,59 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.newButton {
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-surface);
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.formArea {
+  margin-bottom: var(--space-lg);
+}
+
+.formTitle {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-size-lg);
+}
+
+.empty {
+  color: var(--color-text-secondary);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.linkButton,
+.dangerLinkButton {
+  padding: 0;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.linkButton {
+  color: var(--color-primary);
+}
+
+.dangerLinkButton {
+  color: var(--color-danger);
+}

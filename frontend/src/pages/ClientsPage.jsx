@@ -50,7 +50,7 @@ function ClientsPage() {
 function ClientsTable({ clients }) {
   return (
     <div className={styles.tableWrapper}>
-      <table className={styles.table}>
+      <table>
         <thead>
           <tr>
             <th scope="col">Nome</th>

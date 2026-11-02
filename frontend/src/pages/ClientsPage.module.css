@@ -37,25 +37,3 @@
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
 }
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  white-space: nowrap;
-}
-
-.table th,
-.table td {
-  padding: var(--space-sm) var(--space-md);
-  text-align: left;
-  border-bottom: var(--border-width) solid var(--color-border);
-}
-
-.table th {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-}
-
-.table tbody tr:last-child td {
-  border-bottom: none;
-}
