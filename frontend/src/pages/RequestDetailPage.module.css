@@ -63,6 +63,10 @@
   margin-top: var(--space-md);
 }
 
+.actions:empty {
+  display: none;
+}
+
 .editButton,
 .cancelButton {
   padding: var(--space-sm) var(--space-md);

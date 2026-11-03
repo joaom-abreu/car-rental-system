@@ -18,3 +18,9 @@ export function formatLocalDate(date) {
   const [year, month, day] = date.split("-");
   return `${day}/${month}/${year}`;
 }
+
+const percentFormatter = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 });
+
+export function formatPercent(value) {
+  return `${percentFormatter.format(value)}%`;
+}

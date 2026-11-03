@@ -24,3 +24,7 @@ export function cancelRentalRequest(id) {
 export function evaluateRentalRequest(id, evaluation) {
   return request(`/api/rental-requests/${id}/evaluation`, { method: "PATCH", body: evaluation });
 }
+
+export function signContract(id, contract) {
+  return request(`/api/rental-requests/${id}/contract`, { method: "POST", body: contract });
+}
