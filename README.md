@@ -14,11 +14,9 @@
 
 ## 🚧 Status do Projeto
 
-[![CI](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml/badge.svg)](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml) [![Licença](https://img.shields.io/github/license/joaom-abreu/car-rental-system)](#-licença)
+[![CI](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml/badge.svg)](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml) [![Versão](https://img.shields.io/badge/Versão-v1.0.0-blue)](https://github.com/joaom-abreu/car-rental-system/releases) [![Licença](https://img.shields.io/github/license/joaom-abreu/car-rental-system)](#-licença)
 
 ![Java](https://img.shields.io/badge/Java-25-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.1.2-007ec6?style=for-the-badge&logo=springboot&logoColor=white) ![React](https://img.shields.io/badge/React-19.3-007ec6?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-8.3-007ec6?style=for-the-badge&logo=vite&logoColor=white) ![React Router](https://img.shields.io/badge/React_Router-7.18-007ec6?style=for-the-badge&logo=reactrouter&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-007ec6?style=for-the-badge&logo=supabase&logoColor=white) ![GitHub last commit](https://img.shields.io/github/last-commit/joaom-abreu/car-rental-system?style=for-the-badge&logo=git&logoColor=white&color=007ec6)
-
-Todas as funcionalidades do LAB02 estão implementadas, testadas e publicadas.
 
 ---
 
