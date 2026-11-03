@@ -23,13 +23,25 @@
 
 ---
 
+## 🔗 Links Úteis
+
+- 🌐 **Aplicação:** [aluguel-carros.vercel.app](https://aluguel-carros.vercel.app/)
+- 📖 **Documentação da API (Swagger):** [car-rental-system-h9qt.onrender.com/swagger-ui.html](https://car-rental-system-h9qt.onrender.com/swagger-ui.html)
+
+> [!TIP]
+> A API usa o plano gratuito do Render, que desliga depois de alguns minutos sem uso. O primeiro acesso depois disso pode levar cerca de 1 minuto.
+
+---
+
 ## 📚 Índice
 
+- [Links Úteis](#-links-úteis)
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades Previstas](#-funcionalidades-previstas)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [Arquitetura](#-arquitetura)
 - [Instalação e Execução](#-instalação-e-execução)
+- [Deploy](#-deploy)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
 - [Demonstração](#-demonstração)
 - [Testes](#-testes)
@@ -107,6 +119,36 @@ As versões dos modelos e o que mudou entre elas estão em [`docs/uml/README.md`
 ## 🔧 Instalação e Execução
 
 🚧 Em construção.
+
+---
+
+## 🚀 Deploy
+
+O back-end roda no **Render** a partir do `backend/Dockerfile`, e o front-end na **Vercel**. Os dois usam o mesmo banco do Supabase.
+
+### 🖥️ Back-end no Render
+
+1. Crie um **Web Service** ligado a este repositório, com linguagem **Docker** e **Root Directory** `backend`.
+2. Cadastre as variáveis de ambiente (os valores ficam só no Render, nunca no código):
+
+   | Variável | Uso |
+   | --- | --- |
+   | `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` | Conexão com o Supabase (session pooler) |
+   | `JWT_SECRET` | Assinatura dos tokens (gere com `openssl rand -base64 32`) |
+   | `SEED_AGENT_PASSWORD` | Senha da locadora e do banco criados na primeira execução |
+   | `CORS_ALLOWED_ORIGINS` | URL do front-end na Vercel |
+
+   O Render define a variável `PORT` sozinho, e o Spring usa essa porta.
+
+3. A cada push na `main`, o Render gera a imagem Docker e publica a nova versão.
+
+### 💻 Front-end na Vercel
+
+1. Importe este repositório na Vercel com **Root Directory** `frontend` (o preset Vite é detectado sozinho).
+2. Cadastre a variável `VITE_API_URL` com a URL do back-end no Render, sem barra no final. Ela é lida no build: se mudar, faça um novo deploy.
+3. O `frontend/vercel.json` manda todas as rotas para o `index.html`, para que recarregar uma página como `/pedidos/12` não dê erro 404.
+
+Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS` no Render.
 
 ---
 
