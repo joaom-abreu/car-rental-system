@@ -46,7 +46,20 @@
 - 📐 **Modelos UML e histórico de versões:** [`docs/uml`](./docs/uml/README.md)
 - 📝 **Histórias de usuário:** [`docs/historias-de-usuario.md`](./docs/historias-de-usuario.md)
 
-Para testar como cliente, crie uma conta na tela **Cadastre-se**.
+### 🔑 Contas de demonstração
+
+Use estas contas para testar a aplicação online. Os dados são fictícios.
+
+| Perfil | Usuário | Senha | O que dá para testar |
+| --- | --- | --- | --- |
+| Locadora (agente) | `locadora` | `aluguel2026` | Avaliar pedidos, executar contratos, gerenciar clientes e automóveis |
+| Banco (agente) | `banco` | `aluguel2026` | O mesmo da locadora, mais a concessão de contrato de crédito |
+| Cliente | `cliente.demo` | `aluguel2026` | Criar, modificar, consultar e cancelar pedidos e editar o perfil |
+
+Também dá para criar um cliente novo na tela **Cadastre-se**.
+
+> [!WARNING]
+> Estas contas são públicas. Se for se cadastrar, use dados fictícios: os agentes veem os dados de todos os clientes.
 
 > [!TIP]
 > A API usa o plano gratuito do Render, que desliga depois de alguns minutos sem uso. O primeiro acesso depois disso pode levar cerca de 1 minuto.
