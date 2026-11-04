@@ -42,6 +42,7 @@
 ## 🔗 Links Úteis
 
 - 🌐 **Aplicação:** [aluguel-carros.vercel.app](https://aluguel-carros.vercel.app/)
+- 🎨 **Design system:** [aluguel-carros.vercel.app/design](https://aluguel-carros.vercel.app/design)
 - 📖 **Documentação da API (Swagger):** [car-rental-system-h9qt.onrender.com/swagger-ui.html](https://car-rental-system-h9qt.onrender.com/swagger-ui.html)
 - 📐 **Modelos UML e histórico de versões:** [`docs/uml`](./docs/uml/README.md)
 - 📝 **Histórias de usuário:** [`docs/historias-de-usuario.md`](./docs/historias-de-usuario.md)
@@ -86,6 +87,8 @@ A modelagem veio antes do código: histórias de usuário e diagramas de casos d
 - 🏦 **Contrato de crédito:** só o banco pode conceder, com valor, juros ao mês e parcelas. Propriedade do banco exige crédito.
 - 🚘 **Gestão de automóveis:** os agentes cadastram, editam e excluem automóveis; todos veem a lista com o proprietário.
 - 👥 **Gestão de clientes:** os agentes listam, buscam por nome ou CPF, editam e excluem clientes.
+- 🌗 **Tema claro e escuro:** um botão no topo troca o tema, e a escolha fica salva no navegador.
+- 🎨 **Design system:** a página `/design` mostra as cores, a tipografia, os espaçamentos e os componentes da interface, sem precisar de login.
 
 Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancelado** e **Contratado**.
 
@@ -96,7 +99,8 @@ Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancel
 ### 💻 Front-end
 
 - **React 19** com **Vite 8** e **React Router 7**
-- **JavaScript** e **CSS Modules**, com tokens de cor e espaçamento em `styles/tokens.css`
+- **JavaScript** e **CSS Modules**, com tokens de cor e espaçamento em `styles/tokens.css` (tema claro e escuro)
+- **lucide-react** para os ícones
 - **oxlint** para o lint
 
 ### 🖥️ Back-end

@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AutomobilesPage from "./pages/AutomobilesPage";
 import ClientDetailPage from "./pages/ClientDetailPage";
 import ClientsPage from "./pages/ClientsPage";
+import DesignSystemPage from "./pages/DesignSystemPage";
 import LoginPage from "./pages/LoginPage";
 import NewRequestPage from "./pages/NewRequestPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -18,6 +19,7 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cadastro" element={<SignUpPage />} />
+        <Route path="/design" element={<DesignSystemPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Navigate to="/pedidos" replace />} />
           <Route path="/pedidos" element={<RequestsPage />} />
