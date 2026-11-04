@@ -12,23 +12,32 @@ function ClientsPage() {
   const location = useLocation();
   const successMessage = location.state?.successMessage;
   const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [clients, setClients] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    loadClients("");
-  }, []);
-
-  function loadClients(term) {
-    setError("");
-    searchClients(term)
-      .then(setClients)
-      .catch((requestError) => setError(requestError.message));
-  }
+    let ignore = false;
+    searchClients(searchTerm)
+      .then((result) => {
+        if (!ignore) {
+          setClients(result);
+        }
+      })
+      .catch((requestError) => {
+        if (!ignore) {
+          setError(requestError.message);
+        }
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [searchTerm]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    loadClients(search);
+    setError("");
+    setSearchTerm(search);
   }
 
   return (
