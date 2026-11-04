@@ -48,7 +48,7 @@ input:not([type="checkbox"]),
 select,
 textarea {
   padding: var(--space-sm);
-  border: var(--border-width) solid var(--color-border);
+  border: var(--border-width) solid var(--color-border-strong);
   border-radius: var(--radius-sm);
 }
 

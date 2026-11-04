@@ -42,9 +42,9 @@
 }
 
 .active {
-  color: var(--color-primary);
+  color: var(--color-accent);
   font-weight: bold;
-  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
 
 .main {

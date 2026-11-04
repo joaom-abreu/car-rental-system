@@ -3,26 +3,26 @@
   padding: 0 var(--space-sm);
   font-size: var(--font-size-sm);
   font-weight: bold;
-  background: color-mix(in srgb, currentColor 15%, transparent);
+  color: var(--color-on-primary);
   border-radius: var(--radius-full);
 }
 
 .PENDING {
-  color: var(--color-warning);
+  background: var(--color-warning);
 }
 
 .APPROVED {
-  color: var(--color-success);
+  background: var(--color-success);
 }
 
 .REJECTED {
-  color: var(--color-danger);
+  background: var(--color-danger);
 }
 
 .CANCELLED {
-  color: var(--color-text-secondary);
+  background: var(--color-text-secondary);
 }
 
 .CONTRACTED {
-  color: var(--color-info);
+  background: var(--color-info);
 }
