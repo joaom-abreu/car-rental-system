@@ -62,3 +62,9 @@
 .userName {
   color: var(--color-text-secondary);
 }
+
+@media print {
+  .header {
+    display: none;
+  }
+}

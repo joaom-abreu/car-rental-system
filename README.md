@@ -88,7 +88,7 @@ A modelagem veio antes do código: histórias de usuário e diagramas de casos d
 - 🚘 **Gestão de automóveis:** os agentes cadastram, editam e excluem automóveis; todos veem a lista com o proprietário.
 - 👥 **Gestão de clientes:** os agentes listam, buscam por nome ou CPF, editam e excluem clientes.
 - 🌗 **Tema claro e escuro:** um botão no topo troca o tema, e a escolha fica salva no navegador.
-- 🎨 **Design system:** a página `/design` mostra as cores, a tipografia, os espaçamentos e os componentes da interface, sem precisar de login.
+- 🎨 **Design system:** a página `/design` documenta a marca, os dois temas, a paleta (círculo cromático, escalas e tokens), a tipografia, os espaçamentos, os ícones, os botões, os componentes e as regras de acessibilidade com o contraste medido. Não precisa de login e pode ser exportada em PDF.
 
 Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancelado** e **Contratado**.
 
@@ -101,6 +101,7 @@ Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancel
 - **React 19** com **Vite 8** e **React Router 7**
 - **JavaScript** e **CSS Modules**, com tokens de cor e espaçamento em `styles/tokens.css` (tema claro e escuro)
 - **lucide-react** para os ícones
+- Fontes **Chakra Petch** (logo e títulos) e **Inter** (texto), do Google Fonts
 - **oxlint** para o lint
 
 ### 🖥️ Back-end

@@ -1,227 +1,300 @@
-import { Check, Moon, Pencil, Plus, Trash2 } from "lucide-react";
+import { FileDown, Pencil, Trash2 } from "lucide-react";
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
 import Card from "../components/Card/Card";
 import Field from "../components/Field/Field";
+import Logo from "../components/Logo/Logo";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
+import {
+  ACCESSIBILITY_RULES,
+  BUTTON_VARIANTS,
+  CONTRAST_CHECKS,
+  FONT_FAMILIES,
+  FONT_SIZES,
+  ICONS,
+  RADII,
+  SCALES,
+  SECTIONS,
+  SEMANTIC_TOKENS,
+  SPACES,
+  WHEEL_HUES,
+} from "../constants/designSystem";
 import { REQUEST_STATUSES } from "../constants/requestStatus";
+import { readToken } from "../utils/cssTokens";
 import styles from "./DesignSystemPage.module.css";
 
-const COLORS = [
-  { token: "--color-background", use: "Fundo da página" },
-  { token: "--color-surface", use: "Cards, formulários e tabelas" },
-  { token: "--color-surface-muted", use: "Cabeçalho de tabela e hover" },
-  { token: "--color-text", use: "Texto principal" },
-  { token: "--color-text-secondary", use: "Rótulos e textos de apoio" },
-  { token: "--color-border", use: "Bordas de cards e tabelas" },
-  { token: "--color-border-strong", use: "Bordas de campos de formulário" },
-  { token: "--color-primary", use: "Ações principais e links" },
-  { token: "--color-on-primary", use: "Texto sobre botões e badges" },
-  { token: "--color-accent", use: "Textos de destaque e item ativo do menu" },
-  { token: "--color-brand", use: "Símbolo da logo, igual nos dois temas" },
-  { token: "--color-on-brand", use: "Ícone sobre a cor da marca" },
-  { token: "--color-success", use: "Sucesso e aprovado" },
-  { token: "--color-warning", use: "Em análise" },
-  { token: "--color-danger", use: "Erros e ações destrutivas" },
-  { token: "--color-info", use: "Informação e contratado" },
+const THEMES = [
+  { theme: "light", label: "Tema claro" },
+  { theme: "dark", label: "Tema escuro" },
 ];
 
-const FONT_SIZES = [
-  { token: "--font-size-xl", use: "Título da página" },
-  { token: "--font-size-lg", use: "Título de seção" },
-  { token: "--font-size-md", use: "Texto padrão" },
-  { token: "--font-size-sm", use: "Mensagens de erro e cabeçalho de tabela" },
-];
-
-const SPACES = ["--space-xs", "--space-sm", "--space-md", "--space-lg", "--space-xl"];
-
-const RADII = ["--radius-sm", "--radius-md", "--radius-full"];
-
-const ALERT_TYPES = [
+const ALERT_EXAMPLES = [
   { type: "success", text: "Pedido criado. Ele está em análise." },
   { type: "error", text: "Este automóvel já está reservado nesse período." },
   { type: "warning", text: "A API pode levar cerca de 1 minuto para acordar." },
   { type: "info", text: "Faça login para continuar." },
 ];
 
-const SAMPLE_ROWS = [
-  { id: 1, automobile: "Fiat Argo · SAV1A23", status: "PENDING" },
-  { id: 2, automobile: "Hyundai HB20 · SAV2B34", status: "CONTRACTED" },
-];
-
 function DesignSystemPage() {
   return (
-    <section>
-      <h1>Design system</h1>
-      <p className={styles.intro}>
-        Tokens e componentes usados no Sistema de Aluguel de Carros. Os valores ficam em{" "}
-        <code>styles/tokens.css</code>. Use o botão de tema no topo para ver tudo no modo claro e no escuro.
-      </p>
+    <div className={styles.page}>
+      <header className={styles.intro}>
+        <p className={styles.eyebrow}>Documentação do design system</p>
+        <h1>Aluguel de Carros</h1>
+        <p className={styles.lead}>
+          Decisões visuais do front-end: marca, temas, cores, tipografia, medidas, componentes e acessibilidade. Os
+          valores vêm de <code>styles/tokens.css</code>, e os exemplos usam os componentes reais do sistema.
+        </p>
+        <Button icon={FileDown} className={styles.noPrint} onClick={() => window.print()}>
+          Exportar PDF
+        </Button>
+      </header>
+      <nav aria-label="Seções do design system" className={styles.toc}>
+        {SECTIONS.map((section) => (
+          <a key={section.id} href={`#${section.id}`}>
+            {section.title}
+          </a>
+        ))}
+      </nav>
+      <BrandSection />
+      <ThemesSection />
       <ColorsSection />
       <TypographySection />
-      <SpacingSection />
-      <ShapesSection />
+      <MeasuresSection />
       <ButtonsSection />
-      <FieldsSection />
-      <FeedbackSection />
-      <TableSection />
-    </section>
+      <ComponentsSection />
+      <AccessibilitySection />
+    </div>
   );
 }
 
-function Section({ title, children }) {
+function Section({ id, children }) {
+  const { title } = SECTIONS.find((section) => section.id === id);
   return (
-    <Card as="section" className={styles.section}>
-      <h2 className={styles.sectionTitle}>{title}</h2>
+    <Card as="section" id={id} aria-labelledby={`${id}-title`} className={styles.section}>
+      <h2 id={`${id}-title`} className={styles.sectionTitle}>
+        {title}
+      </h2>
       {children}
+    </Card>
+  );
+}
+
+function ThemeBox({ theme, label, children }) {
+  return (
+    <figure className={styles.themeFigure}>
+      <div data-theme={theme} className={styles.themeBox}>
+        {children}
+      </div>
+      <figcaption className={styles.secondary}>{label}</figcaption>
+    </figure>
+  );
+}
+
+function BrandSection() {
+  return (
+    <Section id="marca">
+      <div className={styles.twoColumns}>
+        {THEMES.map(({ theme, label }) => (
+          <ThemeBox key={theme} theme={theme} label={label}>
+            <div className={styles.logoStage}>
+              <Logo />
+            </div>
+          </ThemeBox>
+        ))}
+      </div>
+      <ul className={styles.rules}>
+        <li>
+          A logo é o componente <code>Logo</code>, não uma imagem: fica nítida em qualquer tamanho.
+        </li>
+        <li>
+          O símbolo usa <code>--color-brand</code>, um vermelho fixo nos dois temas, com o carro em branco.
+        </li>
+        <li>
+          O nome usa a Chakra Petch itálica. &quot;Carros&quot; usa <code>--color-accent</code>, que clareia no tema
+          escuro para manter o contraste do texto.
+        </li>
+      </ul>
+    </Section>
+  );
+}
+
+function ThemesSection() {
+  return (
+    <Section id="temas">
+      <p className={styles.text}>
+        Os dois temas usam os mesmos nomes de tokens. O tema escuro só redefine os valores em{" "}
+        <code>[data-theme=&quot;dark&quot;]</code>, então nenhum componente muda. A escolha fica salva no navegador e,
+        na primeira visita, segue o tema do sistema operacional.
+      </p>
+      <div className={styles.twoColumns}>
+        {THEMES.map(({ theme, label }) => (
+          <ThemeBox key={theme} theme={theme} label={label}>
+            <ThemePreview theme={theme} />
+          </ThemeBox>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function ThemePreview({ theme }) {
+  return (
+    <Card className={styles.preview}>
+      <div className={styles.previewTitle}>
+        <strong>Pedido nº 12</strong>
+        <StatusBadge status="APPROVED" />
+      </div>
+      <Field id={`preview-${theme}`} label="Parecer">
+        <input id={`preview-${theme}`} defaultValue="Renda compatível." />
+      </Field>
+      <div className={styles.row}>
+        <Button>Salvar</Button>
+        <Button variant="secondary">Cancelar</Button>
+      </div>
     </Card>
   );
 }
 
 function ColorsSection() {
   return (
-    <Section title="Cores">
-      <div className={styles.colorGrid}>
-        {COLORS.map((color) => (
-          <div key={color.token} className={styles.color}>
-            <div className={styles.swatch} style={{ background: `var(${color.token})` }} />
-            <code>{color.token}</code>
-            <span className={styles.secondary}>{color.use}</span>
+    <Section id="cores">
+      <h3 className={styles.subtitle}>Círculo cromático</h3>
+      <ColorWheel />
+      <h3 className={styles.subtitle}>Escala cromática</h3>
+      <p className={styles.text}>
+        Cada escala mantém o mesmo matiz e só muda a luminosidade: do 50 (mais claro) ao 900 ou 950 (mais escuro).
+      </p>
+      {SCALES.map((scale) => (
+        <ColorScale key={scale.name} scale={scale} />
+      ))}
+      <h3 className={styles.subtitle}>Tokens semânticos</h3>
+      <p className={styles.text}>
+        Os componentes nunca usam a escala direto: usam estes nomes, que apontam para um tom diferente em cada tema.
+      </p>
+      <SemanticTokensTable />
+    </Section>
+  );
+}
+
+function ColorWheel() {
+  return (
+    <div className={styles.wheelArea}>
+      <div className={styles.wheel} aria-hidden="true">
+        {WHEEL_HUES.map((item) => (
+          <span
+            key={item.hue}
+            className={styles.wheelMarker}
+            style={{ background: `var(${item.token})`, transform: `rotate(${item.hue}deg) translateY(-82px)` }}
+          />
+        ))}
+        <span className={styles.wheelCenter}>Neutro</span>
+      </div>
+      <div>
+        <p className={styles.text}>
+          Esquema <strong>acromático com um acento</strong>: a interface é cinza, praticamente sem matiz, e o vermelho
+          entra só como destaque da marca. As cores de status ficam em outras regiões do círculo, para não serem
+          confundidas com o vermelho.
+        </p>
+        <ul className={styles.legend}>
+          {WHEEL_HUES.map((item) => (
+            <li key={item.hue}>
+              <span className={styles.dot} style={{ background: `var(${item.token})` }} />
+              {item.label}: {item.hue}°
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function ColorScale({ scale }) {
+  return (
+    <div className={styles.scale}>
+      <p className={styles.text}>
+        <strong>{scale.name}</strong> <span className={styles.secondary}>{scale.description}</span>
+      </p>
+      <div className={styles.swatches}>
+        {scale.steps.map((step) => (
+          <div key={step} className={styles.swatch}>
+            <span className={styles.swatchColor} style={{ background: `var(--${step})` }} />
+            <code>{step}</code>
+            <span className={styles.secondary}>{readToken(`--${step}`)}</span>
           </div>
         ))}
       </div>
-    </Section>
+    </div>
+  );
+}
+
+function SemanticTokensTable() {
+  return (
+    <Card noPadding className={styles.tableWrapper}>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Token</th>
+            <th scope="col">Uso</th>
+            <th scope="col">Claro</th>
+            <th scope="col">Escuro</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SEMANTIC_TOKENS.map((item) => (
+            <tr key={item.token}>
+              <td>
+                <code>{item.token}</code>
+              </td>
+              <td>{item.use}</td>
+              {THEMES.map(({ theme }) => (
+                <td key={theme}>
+                  <span
+                    data-theme={theme}
+                    className={styles.tokenSwatch}
+                    style={{ background: `var(${item.token})` }}
+                  />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Card>
   );
 }
 
 function TypographySection() {
   return (
-    <Section title="Tipografia">
-      {FONT_SIZES.map((size) => (
-        <div key={size.token} className={styles.tokenRow}>
-          <code className={styles.tokenName}>{size.token}</code>
-          <span style={{ fontSize: `var(${size.token})` }}>{size.use}</span>
-        </div>
-      ))}
-    </Section>
-  );
-}
-
-function SpacingSection() {
-  return (
-    <Section title="Espaçamentos">
-      {SPACES.map((space) => (
-        <div key={space} className={styles.tokenRow}>
-          <code className={styles.tokenName}>{space}</code>
-          <div className={styles.spaceBar} style={{ width: `var(${space})` }} />
-        </div>
-      ))}
-    </Section>
-  );
-}
-
-function ShapesSection() {
-  return (
-    <Section title="Bordas e sombra">
-      <div className={styles.row}>
-        {RADII.map((radius) => (
-          <div key={radius} className={styles.shape} style={{ borderRadius: `var(${radius})` }}>
-            <code>{radius}</code>
+    <Section id="tipografia">
+      <div className={styles.twoColumns}>
+        {FONT_FAMILIES.map((family) => (
+          <div key={family.name}>
+            <p className={`${styles.familySample} ${styles[family.className]}`}>{family.name}</p>
+            <p className={styles.secondary}>{family.detail}</p>
+            <p className={styles.text}>{family.use}</p>
           </div>
         ))}
-        <div className={`${styles.shape} ${styles.shadow}`}>
-          <code>--shadow-sm</code>
-        </div>
       </div>
-    </Section>
-  );
-}
-
-function ButtonsSection() {
-  return (
-    <Section title="Botões">
-      <div className={styles.row}>
-        <Button icon={Plus}>Novo pedido</Button>
-        <Button variant="secondary">Cancelar</Button>
-        <Button variant="danger" icon={Trash2}>
-          Excluir conta
-        </Button>
-        <Button variant="success" icon={Check}>
-          Aprovar
-        </Button>
-        <Button variant="ghost" icon={Pencil} aria-label="Editar" />
-        <Button variant="secondary" icon={Moon} aria-label="Usar tema escuro" />
-        <Button disabled>Salvando...</Button>
-      </div>
-    </Section>
-  );
-}
-
-function FieldsSection() {
-  return (
-    <Section title="Campos">
-      <div className={styles.fields}>
-        <Field id="ds-name" label="Nome completo">
-          <input id="ds-name" defaultValue="Maria Silva" />
-        </Field>
-        <Field id="ds-cpf" label="CPF" error="CPF inválido.">
-          <input id="ds-cpf" defaultValue="111.111.111-11" aria-invalid="true" />
-        </Field>
-        <Field id="ds-automobile" label="Automóvel">
-          <select id="ds-automobile">
-            <option>Fiat Argo 2023 · SAV1A23</option>
-            <option>Hyundai HB20 2022 · SAV2B34</option>
-          </select>
-        </Field>
-        <Field id="ds-opinion" label="Parecer">
-          <textarea id="ds-opinion" rows="3" defaultValue="Renda compatível com o valor do aluguel." />
-        </Field>
-        <div className={styles.checkbox}>
-          <input id="ds-credit" type="checkbox" defaultChecked />
-          <label htmlFor="ds-credit">Conceder contrato de crédito</label>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-function FeedbackSection() {
-  return (
-    <Section title="Alertas e status">
-      {ALERT_TYPES.map((alert) => (
-        <Alert key={alert.type} type={alert.type}>
-          {alert.text}
-        </Alert>
-      ))}
-      <div className={styles.row}>
-        {REQUEST_STATUSES.map((status) => (
-          <StatusBadge key={status} status={status} />
-        ))}
-      </div>
-    </Section>
-  );
-}
-
-function TableSection() {
-  return (
-    <Section title="Tabela">
       <Card noPadding className={styles.tableWrapper}>
         <table>
           <thead>
             <tr>
-              <th scope="col">Nº</th>
-              <th scope="col">Automóvel</th>
-              <th scope="col">Status</th>
+              <th scope="col">Token</th>
+              <th scope="col">Tamanho</th>
+              <th scope="col">Uso</th>
+              <th scope="col">Exemplo</th>
             </tr>
           </thead>
           <tbody>
-            {SAMPLE_ROWS.map((row) => (
-              <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>{row.automobile}</td>
+            {FONT_SIZES.map((size) => (
+              <tr key={size.token}>
                 <td>
-                  <StatusBadge status={row.status} />
+                  <code>{size.token}</code>
                 </td>
+                <td>{size.px}px</td>
+                <td>{size.use}</td>
+                <td style={{ fontSize: `var(${size.token})` }}>{size.sample}</td>
               </tr>
             ))}
           </tbody>
@@ -229,6 +302,171 @@ function TableSection() {
       </Card>
     </Section>
   );
+}
+
+function MeasuresSection() {
+  return (
+    <Section id="medidas">
+      <h3 className={styles.subtitle}>Espaçamentos</h3>
+      {SPACES.map((space) => (
+        <div key={space.token} className={styles.tokenRow}>
+          <code className={styles.tokenName}>{space.token}</code>
+          <span className={styles.tokenValue}>{space.px}px</span>
+          <span className={styles.spaceBar} style={{ width: `var(${space.token})` }} />
+        </div>
+      ))}
+      <h3 className={styles.subtitle}>Arredondamentos e sombra</h3>
+      <div className={styles.shapes}>
+        {RADII.map((radius) => (
+          <div key={radius.token} className={styles.shape} style={{ borderRadius: `var(${radius.token})` }}>
+            <code>{radius.token}</code>
+            <span className={styles.secondary}>{radius.value}</span>
+            <span className={styles.secondary}>{radius.use}</span>
+          </div>
+        ))}
+        <Card className={styles.shape}>
+          <code>--shadow-sm</code>
+          <span className={styles.secondary}>Cards e header</span>
+        </Card>
+      </div>
+    </Section>
+  );
+}
+
+function ButtonsSection() {
+  return (
+    <Section id="botoes">
+      <p className={styles.text}>
+        Todos os botões usam o componente <code>Button</code>:{" "}
+        <code>{'<Button variant="danger" icon={Trash2}>Excluir</Button>'}</code>. Com a prop <code>to</code>, ele vira
+        um link com o mesmo visual.
+      </p>
+      <Card noPadding className={styles.tableWrapper}>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Variante</th>
+              <th scope="col">Exemplo</th>
+              <th scope="col">Quando usar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {BUTTON_VARIANTS.map((item) => (
+              <tr key={item.variant}>
+                <td>
+                  <code>{item.variant}</code>
+                </td>
+                <td>
+                  <Button variant={item.variant} icon={item.icon}>
+                    {item.label}
+                  </Button>
+                </td>
+                <td>{item.use}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+      <h3 className={styles.subtitle}>Estados</h3>
+      <div className={styles.row}>
+        <Button disabled>Salvando...</Button>
+        <Button variant="ghost" icon={Pencil} aria-label="Editar" />
+        <Button variant="danger" icon={Trash2} aria-label="Excluir" />
+      </div>
+      <p className={styles.secondary}>Desabilitado durante o envio e só com ícone (sempre com aria-label).</p>
+      <h3 className={styles.subtitle}>Ícones</h3>
+      <p className={styles.text}>
+        Biblioteca lucide-react, em 18px nos botões, herdando a cor do texto. Estes são os ícones usados no sistema.
+      </p>
+      <ul className={styles.icons}>
+        {ICONS.map(({ icon: Icon, name, use }) => (
+          <li key={name} className={styles.icon}>
+            <Icon size={24} />
+            <code>{name}</code>
+            <span className={styles.secondary}>{use}</span>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+function ComponentsSection() {
+  return (
+    <Section id="componentes">
+      <h3 className={styles.subtitle}>Field</h3>
+      <div className={styles.twoColumns}>
+        <Field id="ds-name" label="Nome completo">
+          <input id="ds-name" defaultValue="Maria Silva" />
+        </Field>
+        <Field id="ds-cpf" label="CPF" error="CPF inválido.">
+          <input id="ds-cpf" defaultValue="111.111.111-11" aria-invalid="true" />
+        </Field>
+      </div>
+      <h3 className={styles.subtitle}>Alert</h3>
+      <div>
+        {ALERT_EXAMPLES.map((alert) => (
+          <Alert key={alert.type} type={alert.type}>
+            {alert.text}
+          </Alert>
+        ))}
+      </div>
+      <h3 className={styles.subtitle}>StatusBadge</h3>
+      <div className={styles.row}>
+        {REQUEST_STATUSES.map((status) => (
+          <StatusBadge key={status} status={status} />
+        ))}
+      </div>
+      <h3 className={styles.subtitle}>Card</h3>
+      <p className={styles.text}>
+        Caixa com fundo, borda, cantos e sombra, usada por formulários, detalhes, tabelas e por cada seção desta
+        página. A prop <code>as</code> escolhe a tag (<code>form</code>, <code>section</code>) e{" "}
+        <code>noPadding</code> serve para tabelas.
+      </p>
+    </Section>
+  );
+}
+
+function AccessibilitySection() {
+  return (
+    <Section id="acessibilidade">
+      <ul className={styles.rules}>
+        {ACCESSIBILITY_RULES.map((rule) => (
+          <li key={rule}>{rule}</li>
+        ))}
+      </ul>
+      <h3 className={styles.subtitle}>Contraste medido</h3>
+      <p className={styles.text}>
+        Calculado com a fórmula de contraste do WCAG 2.1, contra o fundo da página e contra o card (vale o menor).
+      </p>
+      <Card noPadding className={styles.tableWrapper}>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Combinação</th>
+              <th scope="col">Mínimo</th>
+              <th scope="col">Claro</th>
+              <th scope="col">Escuro</th>
+            </tr>
+          </thead>
+          <tbody>
+            {CONTRAST_CHECKS.map((check) => (
+              <tr key={check.label}>
+                <td>{check.label}</td>
+                <td>{check.minimum}:1</td>
+                <td>{formatContrast(check.light, check.minimum)}</td>
+                <td>{formatContrast(check.dark, check.minimum)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+    </Section>
+  );
+}
+
+function formatContrast(ratio, minimum) {
+  return `${ratio.toFixed(1)}:1 ${ratio >= minimum ? "✓" : "✗"}`;
 }
 
 export default DesignSystemPage;

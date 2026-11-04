@@ -99,3 +99,9 @@ tbody tr:last-child td {
   outline: var(--border-width-focus) solid var(--color-primary);
   outline-offset: var(--border-width-focus);
 }
+
+@media print {
+  body {
+    print-color-adjust: exact;
+  }
+}
