@@ -23,9 +23,21 @@ function RequestsPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    let ignore = false;
     getRentalRequests(status)
-      .then(setRequests)
-      .catch((requestError) => setError(requestError.message));
+      .then((result) => {
+        if (!ignore) {
+          setRequests(result);
+        }
+      })
+      .catch((requestError) => {
+        if (!ignore) {
+          setError(requestError.message);
+        }
+      });
+    return () => {
+      ignore = true;
+    };
   }, [status]);
 
   function handleStatusChange(event) {
