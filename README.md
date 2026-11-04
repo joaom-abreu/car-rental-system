@@ -44,7 +44,7 @@
 - 🌐 **Aplicação:** [aluguel-carros.vercel.app](https://aluguel-carros.vercel.app/)
 - 🎨 **Design system:** [aluguel-carros.vercel.app/design](https://aluguel-carros.vercel.app/design)
 - 📖 **Documentação da API (Swagger):** [car-rental-system-h9qt.onrender.com/swagger-ui.html](https://car-rental-system-h9qt.onrender.com/swagger-ui.html)
-- 📐 **Modelos UML e histórico de versões:** [`docs/uml`](./docs/uml/README.md)
+- 📐 **Modelos UML e histórico de versões (v1, v2 e v3):** [`docs/uml`](./docs/uml/README.md)
 - 📝 **Histórias de usuário:** [`docs/historias-de-usuario.md`](./docs/historias-de-usuario.md)
 
 ### 🔑 Contas de demonstração
@@ -73,7 +73,7 @@ Este é o LAB02 de Desenvolvimento e Integração de Aplicações Web (DIAW), na
 
 O sistema só pode ser usado após cadastro e login. **Clientes** pedem o aluguel de um automóvel e acompanham o status do pedido. **Agentes** (uma locadora e um banco, já cadastrados) avaliam os pedidos e executam os contratos. Ao executar o contrato, o automóvel fica registrado como propriedade do cliente, da empresa ou do banco.
 
-A modelagem veio antes do código: histórias de usuário e diagramas de casos de uso, classes e pacotes (v1). No fim, os diagramas foram refeitos a partir do código (v2), e as diferenças estão explicadas em [`docs/uml/README.md`](./docs/uml/README.md). As classes, os atributos, os enums e os pacotes dos diagramas têm os mesmos nomes do código.
+A modelagem veio antes do código: histórias de usuário e diagramas de casos de uso, classes e pacotes (v1). No fim, os diagramas foram refeitos a partir do código (v2) e, depois do tema claro e escuro, o de pacotes ganhou uma v3. As diferenças entre as versões estão explicadas em [`docs/uml/README.md`](./docs/uml/README.md). As classes, os atributos, os enums e os pacotes dos diagramas têm os mesmos nomes do código.
 
 Na segunda etapa, o front-end ganhou um **design system**: paleta montada a partir do círculo cromático, tema claro e escuro, tipografia, componentes reutilizáveis e regras de acessibilidade, tudo documentado na página [`/design`](https://aluguel-carros.vercel.app/design).
 
@@ -136,13 +136,15 @@ O sistema segue o padrão **MVC** e é dividido em dois subsistemas, que só con
 
 O navegador nunca acessa o banco: só o back-end fala com o Supabase.
 
-### Diagramas (v2)
+### Diagramas atuais
 
-| Casos de Uso | Pacotes |
+Casos de uso e classes na v2; pacotes na v3.
+
+| Casos de Uso (v2) | Pacotes (v3) |
 | :---: | :---: |
-| <img src="./docs/uml/v2/casos-de-uso.png" alt="Diagrama de casos de uso v2 com os atores Cliente, Agente, Empresa e Banco" width="300"> | <img src="./docs/uml/v2/pacotes.png" alt="Diagrama de pacotes v2 com as pastas do front-end, os pacotes do back-end e o Supabase" width="460"> |
+| <img src="./docs/uml/v2/casos-de-uso.png" alt="Diagrama de casos de uso v2 com os atores Cliente, Agente, Empresa e Banco" width="300"> | <img src="./docs/uml/v3/pacotes.png" alt="Diagrama de pacotes v3 com as pastas do front-end, os pacotes do back-end e o Supabase" width="460"> |
 
-| Classes |
+| Classes (v2) |
 | :---: |
 | <img src="./docs/uml/v2/classes.png" alt="Diagrama de classes v2 do domínio: User, Client, Agent, Automobile, RentalRequest, Contract e CreditContract" width="560"> |
 
@@ -263,7 +265,7 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
 │   ├── historias-de-usuario.md     # 📝 Histórias de usuário e regras de negócio.
 │   ├── assets/                     # 🖼️ Imagens do README.
 │   ├── screenshots/                # 📸 Prints da aplicação.
-│   └── uml/                        # 📐 Diagramas UML (v1 e v2) e histórico de versões.
+│   └── uml/                        # 📐 Diagramas UML (v1, v2 e v3) e histórico de versões.
 ├── backend/                        # 🖥️ API em Spring Boot.
 │   ├── Dockerfile                  # 🐳 Imagem usada no Render.
 │   ├── .env.example                # 🔑 Variáveis de ambiente, sem valores reais.
