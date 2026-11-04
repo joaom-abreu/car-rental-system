@@ -15,6 +15,7 @@ plantuml -tpng docs/uml/v1/*.puml
 | [v1](v1/) | 2026-11-02 | Modelo inicial, feito antes do código: [casos de uso](v1/casos-de-uso.png), [classes](v1/classes.png) e [pacotes](v1/pacotes.png). |
 | [v2](v2/) | 2026-11-02 | Modelo refeito a partir do código final: [casos de uso](v2/casos-de-uso.png), [classes](v2/classes.png) e [pacotes](v2/pacotes.png). |
 | [v3](v3/) | 2026-11-04 | Só o diagrama de [pacotes](v3/pacotes.png), por causa do tema claro e escuro. Casos de uso e classes continuam os da v2. |
+| [v4](v4/) | 2026-11-04 | Só o diagrama de [pacotes](v4/pacotes.png), com a BrasilAPI como sistema externo. Casos de uso e classes continuam os da v2. |
 
 ## v1 → v2: o que mudou e por quê
 
@@ -33,6 +34,15 @@ Na segunda etapa, o front-end ganhou o tema claro e escuro e o design system. Os
 - **`services → constants`:** o `themeStorage` usa esses mesmos nomes para devolver o tema do sistema na primeira visita.
 
 O back-end não mudou, então os pacotes dele e o diagrama de classes continuam iguais. Os casos de uso também: trocar o tema e consultar o design system não são regras de negócio do aluguel.
+
+## v3 → v4: o que mudou e por quê
+
+O pedido de aluguel passou a avisar quando o período inclui feriados nacionais. A lista de feriados vem da **BrasilAPI**, uma API pública e gratuita, chamada direto pelo navegador.
+
+- **`services → BrasilAPI`:** o novo `brasilApiService` busca os feriados do ano. Ele faz o próprio `fetch`, sem passar pelo `httpClient`, para que o token de login do usuário nunca seja enviado a um site de terceiros. O endereço da BrasilAPI fica em `frontend.config`, junto com o da nossa API.
+- O hook `useHolidays` (em `hooks`) chama esse serviço e filtra os feriados do período. As setas `hooks → services`, `pages → hooks` e `components → hooks` já existiam, então o resto do diagrama não muda.
+
+O back-end não mudou. Os casos de uso também continuam os mesmos: o aviso de feriado é uma informação dentro de "Criar pedido", "Modificar pedido" e "Consultar pedidos", não um caso de uso novo.
 
 ## Casos de uso → histórias de usuário
 

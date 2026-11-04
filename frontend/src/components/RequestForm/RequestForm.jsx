@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { formatLocalDate, maskLocalDate, parseLocalDate } from "../../utils/formatters";
+import { useHolidays } from "../../hooks/useHolidays";
+import { formatHolidays, formatLocalDate, maskLocalDate, parseLocalDate } from "../../utils/formatters";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
 import Card from "../Card/Card";
@@ -21,6 +22,7 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const holidays = useHolidays(parseLocalDate(form.startDate), parseLocalDate(form.endDate));
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -83,6 +85,7 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
           />
         </Field>
       ))}
+      {holidays.length > 0 && <Alert type="info">{holidayMessage(holidays)}</Alert>}
       <Button type="submit" disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
       </Button>
@@ -101,6 +104,11 @@ function toFormValues(rentalRequest) {
     startDate: formatLocalDate(rentalRequest.startDate),
     endDate: formatLocalDate(rentalRequest.endDate),
   };
+}
+
+function holidayMessage(holidays) {
+  const label = holidays.length === 1 ? "o feriado nacional" : "os feriados nacionais";
+  return `O período inclui ${label}: ${formatHolidays(holidays)}.`;
 }
 
 function validateDates(form) {

@@ -44,7 +44,7 @@
 - 🌐 **Aplicação:** [aluguel-carros.vercel.app](https://aluguel-carros.vercel.app/)
 - 🎨 **Design system:** [aluguel-carros.vercel.app/design](https://aluguel-carros.vercel.app/design)
 - 📖 **Documentação da API (Swagger):** [car-rental-system-h9qt.onrender.com/swagger-ui.html](https://car-rental-system-h9qt.onrender.com/swagger-ui.html)
-- 📐 **Modelos UML e histórico de versões (v1, v2 e v3):** [`docs/uml`](./docs/uml/README.md)
+- 📐 **Modelos UML e histórico de versões (v1 a v4):** [`docs/uml`](./docs/uml/README.md)
 - 📝 **Histórias de usuário:** [`docs/historias-de-usuario.md`](./docs/historias-de-usuario.md)
 
 ### 🔑 Contas de demonstração
@@ -73,7 +73,7 @@ Este é o LAB02 de Desenvolvimento e Integração de Aplicações Web (DIAW), na
 
 O sistema só pode ser usado após cadastro e login. **Clientes** pedem o aluguel de um automóvel e acompanham o status do pedido. **Agentes** (uma locadora e um banco, já cadastrados) avaliam os pedidos e executam os contratos. Ao executar o contrato, o automóvel fica registrado como propriedade do cliente, da empresa ou do banco.
 
-A modelagem veio antes do código: histórias de usuário e diagramas de casos de uso, classes e pacotes (v1). No fim, os diagramas foram refeitos a partir do código (v2) e, depois do tema claro e escuro, o de pacotes ganhou uma v3. As diferenças entre as versões estão explicadas em [`docs/uml/README.md`](./docs/uml/README.md). As classes, os atributos, os enums e os pacotes dos diagramas têm os mesmos nomes do código.
+A modelagem veio antes do código: histórias de usuário e diagramas de casos de uso, classes e pacotes (v1). No fim, os diagramas foram refeitos a partir do código (v2) e o de pacotes ganhou a v3 (tema claro e escuro) e a v4 (integração com a BrasilAPI). As diferenças entre as versões estão explicadas em [`docs/uml/README.md`](./docs/uml/README.md). As classes, os atributos, os enums e os pacotes dos diagramas têm os mesmos nomes do código.
 
 Na segunda etapa, o front-end ganhou um **design system**: paleta montada a partir do círculo cromático, tema claro e escuro, tipografia, componentes reutilizáveis e regras de acessibilidade, tudo documentado na página [`/design`](https://aluguel-carros.vercel.app/design).
 
@@ -84,6 +84,7 @@ Na segunda etapa, o front-end ganhou um **design system**: paleta montada a part
 - 🔐 **Cadastro e login** com usuário e senha (JWT). O cliente se cadastra; os agentes já vêm criados.
 - 👤 **Perfil do cliente** com RG, CPF, endereço, profissão e até 3 empregos com rendimento. O cliente edita os dados e pode excluir a conta.
 - 📝 **Pedidos de aluguel:** o cliente escolhe o automóvel e o período, acompanha o status e pode modificar (em análise) ou cancelar (em análise ou aprovado).
+- 📅 **Feriados no período:** ao escolher as datas, e no detalhe do pedido, o sistema avisa quais feriados nacionais caem no aluguel, consultando a BrasilAPI.
 - ✅ **Avaliação financeira:** o agente aprova ou reprova o pedido com um parecer. Um automóvel não pode ter dois pedidos aprovados no mesmo período.
 - 📄 **Contrato:** com o pedido aprovado, o agente executa o contrato e define o proprietário do automóvel (cliente, empresa ou banco).
 - 🏦 **Contrato de crédito:** só o banco pode conceder, com valor, juros ao mês e parcelas. Propriedade do banco exige crédito.
@@ -103,6 +104,7 @@ Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancel
 - **React 19** com **Vite 8** e **React Router 7**
 - **JavaScript** e **CSS Modules**, com tokens de cor e espaçamento em `styles/tokens.css` (tema claro e escuro)
 - **lucide-react** para os ícones
+- **BrasilAPI** para os feriados nacionais (API pública, chamada direto pelo navegador)
 - Fontes **Chakra Petch** (logo e títulos) e **Inter** (texto), do Google Fonts
 - **oxlint** para o lint
 
@@ -134,15 +136,15 @@ O sistema segue o padrão **MVC** e é dividido em dois subsistemas, que só con
 - **Construção dinâmica das páginas** (`frontend/`): é a **View**. As páginas em React chamam a API só pela camada de `services`. O visual sai de componentes reutilizáveis (`Button`, `Field`, `Card`, `Alert`, `StatusBadge`, `Logo`), que usam só os tokens de `styles/tokens.css`.
 - **Gestão de pedidos e contratos** (`backend/`): os **Controllers** recebem as requisições e devolvem DTOs, os **Services** aplicam as regras de negócio e a checagem de dono e de perfil, e o **Model** (entidades e repositórios) guarda os dados no Supabase. As regras de mudança de status ficam nos métodos da própria entidade `RentalRequest` (`approve`, `reject`, `cancel`, `markAsContracted`).
 
-O navegador nunca acessa o banco: só o back-end fala com o Supabase.
+O navegador nunca acessa o banco: só o back-end fala com o Supabase. A única chamada que sai do front para fora do sistema é a da BrasilAPI (feriados), feita sem o token de login.
 
 ### Diagramas atuais
 
-Casos de uso e classes na v2; pacotes na v3.
+Casos de uso e classes na v2; pacotes na v4.
 
-| Casos de Uso (v2) | Pacotes (v3) |
+| Casos de Uso (v2) | Pacotes (v4) |
 | :---: | :---: |
-| <img src="./docs/uml/v2/casos-de-uso.png" alt="Diagrama de casos de uso v2 com os atores Cliente, Agente, Empresa e Banco" width="300"> | <img src="./docs/uml/v3/pacotes.png" alt="Diagrama de pacotes v3 com as pastas do front-end, os pacotes do back-end e o Supabase" width="460"> |
+| <img src="./docs/uml/v2/casos-de-uso.png" alt="Diagrama de casos de uso v2 com os atores Cliente, Agente, Empresa e Banco" width="300"> | <img src="./docs/uml/v4/pacotes.png" alt="Diagrama de pacotes v4 com as pastas do front-end, os pacotes do back-end, o Supabase e a BrasilAPI" width="460"> |
 
 | Classes (v2) |
 | :---: |
@@ -265,7 +267,7 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
 │   ├── historias-de-usuario.md     # 📝 Histórias de usuário e regras de negócio.
 │   ├── assets/                     # 🖼️ Imagens do README.
 │   ├── screenshots/                # 📸 Prints da aplicação.
-│   └── uml/                        # 📐 Diagramas UML (v1, v2 e v3) e histórico de versões.
+│   └── uml/                        # 📐 Diagramas UML (v1 a v4) e histórico de versões.
 ├── backend/                        # 🖥️ API em Spring Boot.
 │   ├── Dockerfile                  # 🐳 Imagem usada no Render.
 │   ├── .env.example                # 🔑 Variáveis de ambiente, sem valores reais.
@@ -285,7 +287,7 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
     └── src/
         ├── pages/                  # 📄 Telas.
         ├── components/             # 🧩 Button, Field, Card, Logo, formulários e outras peças reutilizáveis.
-        ├── services/               # 🔌 Chamadas à API (o único lugar com fetch) e o que fica salvo no navegador.
+        ├── services/               # 🔌 Chamadas à API e à BrasilAPI (o único lugar com fetch) e o que fica salvo no navegador.
         ├── contexts/               # 👤 Sessão do usuário.
         ├── hooks/                  # 🪝 useAuth e useTheme.
         ├── constants/              # 🏷️ Rótulos de status e de propriedade, temas e dados do design system.
@@ -464,6 +466,7 @@ O **GitHub Actions** roda os testes do back-end e o lint e o build do front-end 
 - [React Router](https://reactrouter.com/)
 - [Vite](https://vite.dev/)
 - [Lucide](https://lucide.dev/guide/packages/lucide-react)
+- [BrasilAPI](https://brasilapi.com.br/docs)
 - [Google Fonts](https://fonts.google.com/)
 - [WCAG 2.1: contraste mínimo](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
 - [Supabase](https://supabase.com/docs)

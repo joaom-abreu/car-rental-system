@@ -21,6 +21,10 @@ export function formatLocalDate(date) {
   return `${day}/${month}/${year}`;
 }
 
+export function formatHolidays(holidays) {
+  return holidays.map((holiday) => `${holiday.name} (${formatLocalDate(holiday.date)})`).join(", ");
+}
+
 export function maskLocalDate(value) {
   const digits = value.replace(/\D/g, "").slice(0, DATE_DIGITS);
   return [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4)].filter(Boolean).join("/");

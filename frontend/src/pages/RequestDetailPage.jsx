@@ -10,6 +10,7 @@ import RequestForm from "../components/RequestForm/RequestForm";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import { OWNERSHIP_TYPE_LABELS } from "../constants/ownershipType";
 import { useAuth } from "../hooks/useAuth";
+import { useHolidays } from "../hooks/useHolidays";
 import { getAutomobiles } from "../services/automobileService";
 import {
   cancelRentalRequest,
@@ -18,7 +19,14 @@ import {
   signContract,
   updateRentalRequest,
 } from "../services/rentalRequestService";
-import { formatCpf, formatCurrency, formatDate, formatLocalDate, formatPercent } from "../utils/formatters";
+import {
+  formatCpf,
+  formatCurrency,
+  formatDate,
+  formatHolidays,
+  formatLocalDate,
+  formatPercent,
+} from "../utils/formatters";
 import styles from "./RequestDetailPage.module.css";
 
 const PENDING_STATUS = "PENDING";
@@ -155,6 +163,7 @@ function RequestDetailPage() {
 function RequestDetails({ rentalRequest }) {
   const { client, automobile, evaluation, contract } = rentalRequest;
   const showContract = contract || rentalRequest.status === APPROVED_STATUS;
+  const holidays = useHolidays(rentalRequest.startDate, rentalRequest.endDate);
   return (
     <Card>
       <h2 className={styles.subtitle}>Pedido</h2>
@@ -163,6 +172,12 @@ function RequestDetails({ rentalRequest }) {
         <dd>
           {formatLocalDate(rentalRequest.startDate)} a {formatLocalDate(rentalRequest.endDate)}
         </dd>
+        {holidays.length > 0 && (
+          <>
+            <dt>Feriados</dt>
+            <dd>{formatHolidays(holidays)}</dd>
+          </>
+        )}
         <dt>Criado em</dt>
         <dd>{formatDate(rentalRequest.createdAt)}</dd>
         <dt>Atualizado em</dt>
