@@ -16,8 +16,8 @@
 }
 
 .brand {
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
-  font-weight: bold;
   color: var(--color-primary);
   text-decoration: none;
 }
