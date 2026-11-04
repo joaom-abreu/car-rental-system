@@ -6,6 +6,7 @@
   background: var(--color-surface);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .field {
@@ -34,7 +35,7 @@
 
 .submit {
   padding: var(--space-sm) var(--space-md);
-  color: var(--color-surface);
+  color: var(--color-on-primary);
   background: var(--color-primary);
   border: none;
   border-radius: var(--radius-sm);

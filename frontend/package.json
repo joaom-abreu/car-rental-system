@@ -12,6 +12,7 @@
     "dev:all": "concurrently --names \"BACK,FRONT\" --prefix-colors \"blue,magenta\" \"npm run back\" \"npm run dev\""
   },
   "dependencies": {
+    "lucide-react": "^1.68.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.5"

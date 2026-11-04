@@ -11,6 +11,7 @@ body {
   line-height: var(--line-height);
   color: var(--color-text);
   background: var(--color-background);
+  accent-color: var(--color-primary);
 }
 
 h1 {
@@ -33,6 +34,27 @@ textarea {
   font: inherit;
 }
 
+input,
+select,
+textarea {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+}
+
+button {
+  transition: opacity 0.15s;
+}
+
+button:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -49,6 +71,11 @@ td {
 th {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  background: var(--color-surface-muted);
+}
+
+tbody tr:hover td {
+  background: var(--color-surface-muted);
 }
 
 tbody tr:last-child td {
@@ -56,6 +83,6 @@ tbody tr:last-child td {
 }
 
 :focus-visible {
-  outline: var(--border-width-thick) solid var(--color-primary);
-  outline-offset: var(--border-width);
+  outline: var(--border-width-focus) solid var(--color-primary);
+  outline-offset: var(--border-width-focus);
 }

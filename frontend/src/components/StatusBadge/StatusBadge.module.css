@@ -3,8 +3,8 @@
   padding: 0 var(--space-sm);
   font-size: var(--font-size-sm);
   font-weight: bold;
-  border: var(--border-width) solid currentColor;
-  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, currentColor 15%, transparent);
+  border-radius: var(--radius-full);
 }
 
 .PENDING {
