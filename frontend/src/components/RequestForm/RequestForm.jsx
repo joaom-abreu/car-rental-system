@@ -1,8 +1,17 @@
 import { useState } from "react";
+import { formatLocalDate, maskLocalDate, parseLocalDate } from "../../utils/formatters";
 import Alert from "../Alert/Alert";
 import styles from "./RequestForm.module.css";
 
 const EMPTY_REQUEST = { automobileId: "", startDate: "", endDate: "" };
+const INVALID_DATE_MESSAGE = "Data inválida. Use o formato dd/mm/aaaa.";
+const DATE_PLACEHOLDER = "dd/mm/aaaa";
+const DATE_LENGTH = 10;
+
+const DATE_FIELDS = [
+  { name: "startDate", label: "Início" },
+  { name: "endDate", label: "Fim" },
+];
 
 function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCancel }) {
   const [form, setForm] = useState(() => (rentalRequest ? toFormValues(rentalRequest) : EMPTY_REQUEST));
@@ -15,11 +24,20 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
     setForm((currentForm) => ({ ...currentForm, [name]: value }));
   }
 
+  function handleDateChange(event) {
+    const { name, value } = event.target;
+    setForm((currentForm) => ({ ...currentForm, [name]: maskLocalDate(value) }));
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
-    setSubmitting(true);
+    const dateErrors = validateDates(form);
     setError("");
-    setFieldErrors({});
+    setFieldErrors(dateErrors);
+    if (Object.keys(dateErrors).length > 0) {
+      return;
+    }
+    setSubmitting(true);
     try {
       await onSubmit(toPayload(form));
     } catch (requestError) {
@@ -50,30 +68,22 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
         </select>
         {fieldErrors.automobileId && <p className={styles.fieldError}>{fieldErrors.automobileId}</p>}
       </div>
-      <div className={styles.field}>
-        <label htmlFor="startDate">Início</label>
-        <input
-          id="startDate"
-          name="startDate"
-          type="date"
-          value={form.startDate}
-          onChange={handleChange}
-          aria-invalid={Boolean(fieldErrors.startDate)}
-        />
-        {fieldErrors.startDate && <p className={styles.fieldError}>{fieldErrors.startDate}</p>}
-      </div>
-      <div className={styles.field}>
-        <label htmlFor="endDate">Fim</label>
-        <input
-          id="endDate"
-          name="endDate"
-          type="date"
-          value={form.endDate}
-          onChange={handleChange}
-          aria-invalid={Boolean(fieldErrors.endDate)}
-        />
-        {fieldErrors.endDate && <p className={styles.fieldError}>{fieldErrors.endDate}</p>}
-      </div>
+      {DATE_FIELDS.map((field) => (
+        <div key={field.name} className={styles.field}>
+          <label htmlFor={field.name}>{field.label}</label>
+          <input
+            id={field.name}
+            name={field.name}
+            inputMode="numeric"
+            placeholder={DATE_PLACEHOLDER}
+            maxLength={DATE_LENGTH}
+            value={form[field.name]}
+            onChange={handleDateChange}
+            aria-invalid={Boolean(fieldErrors[field.name])}
+          />
+          {fieldErrors[field.name] && <p className={styles.fieldError}>{fieldErrors[field.name]}</p>}
+        </div>
+      ))}
       <button type="submit" className={styles.submit} disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
       </button>
@@ -89,16 +99,27 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
 function toFormValues(rentalRequest) {
   return {
     automobileId: String(rentalRequest.automobile.id),
-    startDate: rentalRequest.startDate,
-    endDate: rentalRequest.endDate,
+    startDate: formatLocalDate(rentalRequest.startDate),
+    endDate: formatLocalDate(rentalRequest.endDate),
   };
+}
+
+function validateDates(form) {
+  const errors = {};
+  for (const field of DATE_FIELDS) {
+    const value = form[field.name];
+    if (value !== "" && parseLocalDate(value) === null) {
+      errors[field.name] = INVALID_DATE_MESSAGE;
+    }
+  }
+  return errors;
 }
 
 function toPayload(form) {
   return {
     automobileId: form.automobileId === "" ? null : Number(form.automobileId),
-    startDate: form.startDate === "" ? null : form.startDate,
-    endDate: form.endDate === "" ? null : form.endDate,
+    startDate: parseLocalDate(form.startDate),
+    endDate: parseLocalDate(form.endDate),
   };
 }
 
