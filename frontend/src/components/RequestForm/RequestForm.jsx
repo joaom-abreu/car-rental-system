@@ -2,6 +2,8 @@ import { useState } from "react";
 import { formatLocalDate, maskLocalDate, parseLocalDate } from "../../utils/formatters";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
+import Field from "../Field/Field";
 import styles from "./RequestForm.module.css";
 
 const EMPTY_REQUEST = { automobileId: "", startDate: "", endDate: "" };
@@ -49,10 +51,9 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+    <Card as="form" className={styles.form} onSubmit={handleSubmit} noValidate>
       {error && <Alert type="error">{error}</Alert>}
-      <div className={styles.field}>
-        <label htmlFor="automobileId">Automóvel</label>
+      <Field id="automobileId" label="Automóvel" error={fieldErrors.automobileId}>
         <select
           id="automobileId"
           name="automobileId"
@@ -67,11 +68,9 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
             </option>
           ))}
         </select>
-        {fieldErrors.automobileId && <p className={styles.fieldError}>{fieldErrors.automobileId}</p>}
-      </div>
+      </Field>
       {DATE_FIELDS.map((field) => (
-        <div key={field.name} className={styles.field}>
-          <label htmlFor={field.name}>{field.label}</label>
+        <Field key={field.name} id={field.name} label={field.label} error={fieldErrors[field.name]}>
           <input
             id={field.name}
             name={field.name}
@@ -82,8 +81,7 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
             onChange={handleDateChange}
             aria-invalid={Boolean(fieldErrors[field.name])}
           />
-          {fieldErrors[field.name] && <p className={styles.fieldError}>{fieldErrors[field.name]}</p>}
-        </div>
+        </Field>
       ))}
       <Button type="submit" disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
@@ -93,7 +91,7 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
           Cancelar
         </Button>
       )}
-    </form>
+    </Card>
   );
 }
 

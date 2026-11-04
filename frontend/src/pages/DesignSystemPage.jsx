@@ -1,6 +1,8 @@
 import { Check, Moon, Pencil, Plus, Trash2 } from "lucide-react";
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
+import Field from "../components/Field/Field";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import { REQUEST_STATUSES } from "../constants/requestStatus";
 import styles from "./DesignSystemPage.module.css";
@@ -65,10 +67,10 @@ function DesignSystemPage() {
 
 function Section({ title, children }) {
   return (
-    <section className={styles.section}>
+    <Card as="section" className={styles.section}>
       <h2 className={styles.sectionTitle}>{title}</h2>
       {children}
-    </section>
+    </Card>
   );
 }
 
@@ -155,26 +157,21 @@ function FieldsSection() {
   return (
     <Section title="Campos">
       <div className={styles.fields}>
-        <div className={styles.field}>
-          <label htmlFor="ds-name">Nome completo</label>
+        <Field id="ds-name" label="Nome completo">
           <input id="ds-name" defaultValue="Maria Silva" />
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="ds-cpf">CPF</label>
+        </Field>
+        <Field id="ds-cpf" label="CPF" error="CPF inválido.">
           <input id="ds-cpf" defaultValue="111.111.111-11" aria-invalid="true" />
-          <p className={styles.fieldError}>CPF inválido.</p>
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="ds-automobile">Automóvel</label>
+        </Field>
+        <Field id="ds-automobile" label="Automóvel">
           <select id="ds-automobile">
             <option>Fiat Argo 2023 · SAV1A23</option>
             <option>Hyundai HB20 2022 · SAV2B34</option>
           </select>
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="ds-opinion">Parecer</label>
+        </Field>
+        <Field id="ds-opinion" label="Parecer">
           <textarea id="ds-opinion" rows="3" defaultValue="Renda compatível com o valor do aluguel." />
-        </div>
+        </Field>
         <div className={styles.checkbox}>
           <input id="ds-credit" type="checkbox" defaultChecked />
           <label htmlFor="ds-credit">Conceder contrato de crédito</label>
@@ -204,7 +201,7 @@ function FeedbackSection() {
 function TableSection() {
   return (
     <Section title="Tabela">
-      <div className={styles.tableWrapper}>
+      <Card noPadding className={styles.tableWrapper}>
         <table>
           <thead>
             <tr>
@@ -225,7 +222,7 @@ function TableSection() {
             ))}
           </tbody>
         </table>
-      </div>
+      </Card>
     </Section>
   );
 }

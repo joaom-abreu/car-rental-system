@@ -3,39 +3,11 @@
   flex-direction: column;
   gap: var(--space-md);
   margin-top: var(--space-lg);
-  padding: var(--space-lg);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }
 
 .title {
   margin: 0;
   font-size: var(--font-size-lg);
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.field textarea {
-  padding: var(--space-sm);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-sm);
-  resize: vertical;
-}
-
-.field textarea[aria-invalid="true"] {
-  border-color: var(--color-danger);
-}
-
-.fieldError {
-  margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-danger);
 }
 
 .actions {

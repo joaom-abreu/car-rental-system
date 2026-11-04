@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
 import ContractForm from "../components/ContractForm/ContractForm";
 import EvaluationForm from "../components/EvaluationForm/EvaluationForm";
 import RequestForm from "../components/RequestForm/RequestForm";
@@ -155,7 +156,7 @@ function RequestDetails({ rentalRequest }) {
   const { client, automobile, evaluation, contract } = rentalRequest;
   const showContract = contract || rentalRequest.status === APPROVED_STATUS;
   return (
-    <div className={styles.card}>
+    <Card>
       <h2 className={styles.subtitle}>Pedido</h2>
       <dl className={styles.details}>
         <dt>Período</dt>
@@ -199,7 +200,7 @@ function RequestDetails({ rentalRequest }) {
       {showContract && <h2 className={styles.subtitle}>Contrato</h2>}
       {contract && <ContractDetails contract={contract} />}
       {showContract && !contract && <p className={styles.empty}>O contrato ainda não foi executado.</p>}
-    </div>
+    </Card>
   );
 }
 

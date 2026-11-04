@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
+import Field from "../components/Field/Field";
 import { useAuth } from "../hooks/useAuth";
 import styles from "./LoginPage.module.css";
 
@@ -45,9 +47,8 @@ function LoginPage() {
       <h1>Entrar</h1>
       {successMessage && !error && <Alert type="success">{successMessage}</Alert>}
       {error && <Alert type="error">{error}</Alert>}
-      <form className={styles.form} onSubmit={handleSubmit} noValidate>
-        <div className={styles.field}>
-          <label htmlFor="username">Usuário</label>
+      <Card as="form" className={styles.form} onSubmit={handleSubmit} noValidate>
+        <Field id="username" label="Usuário" error={fieldErrors.username}>
           <input
             id="username"
             name="username"
@@ -56,10 +57,8 @@ function LoginPage() {
             onChange={handleChange}
             aria-invalid={Boolean(fieldErrors.username)}
           />
-          {fieldErrors.username && <p className={styles.fieldError}>{fieldErrors.username}</p>}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="password">Senha</label>
+        </Field>
+        <Field id="password" label="Senha" error={fieldErrors.password}>
           <input
             id="password"
             name="password"
@@ -69,12 +68,11 @@ function LoginPage() {
             onChange={handleChange}
             aria-invalid={Boolean(fieldErrors.password)}
           />
-          {fieldErrors.password && <p className={styles.fieldError}>{fieldErrors.password}</p>}
-        </div>
+        </Field>
         <Button type="submit" icon={LogIn} disabled={submitting}>
           {submitting ? "Entrando..." : "Entrar"}
         </Button>
-      </form>
+      </Card>
       <p className={styles.signUpLink}>
         Ainda não tem conta? <Link to="/cadastro">Criar conta</Link>
       </p>

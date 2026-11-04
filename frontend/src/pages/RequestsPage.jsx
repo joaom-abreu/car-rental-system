@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import { REQUEST_STATUS_LABELS, REQUEST_STATUSES } from "../constants/requestStatus";
 import { useAuth } from "../hooks/useAuth";
@@ -65,7 +66,7 @@ function RequestsPage() {
 
 function RequestsTable({ requests, showClient }) {
   return (
-    <div className={styles.tableWrapper}>
+    <Card noPadding className={styles.tableWrapper}>
       <table>
         <thead>
           <tr>
@@ -100,7 +101,7 @@ function RequestsTable({ requests, showClient }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </Card>
   );
 }
 

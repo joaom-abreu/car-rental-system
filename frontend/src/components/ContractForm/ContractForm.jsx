@@ -3,6 +3,8 @@ import { useState } from "react";
 import { BANK_OWNERSHIP, OWNERSHIP_TYPE_LABELS } from "../../constants/ownershipType";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
+import Field from "../Field/Field";
 import styles from "./ContractForm.module.css";
 
 const EMPTY_CREDIT = { amount: "", monthlyInterestRate: "", installments: "" };
@@ -49,13 +51,12 @@ function ContractForm({ isBank, onSign }) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate aria-labelledby="contract-title">
+    <Card as="form" className={styles.form} onSubmit={handleSubmit} noValidate aria-labelledby="contract-title">
       <h2 id="contract-title" className={styles.title}>
         Executar contrato
       </h2>
       {error && <Alert type="error">{error}</Alert>}
-      <div className={styles.field}>
-        <label htmlFor="ownershipType">Propriedade do automóvel</label>
+      <Field id="ownershipType" label="Propriedade do automóvel" error={fieldErrors.ownershipType}>
         <select
           id="ownershipType"
           value={ownershipType}
@@ -69,8 +70,7 @@ function ContractForm({ isBank, onSign }) {
             </option>
           ))}
         </select>
-        {fieldErrors.ownershipType && <p className={styles.fieldError}>{fieldErrors.ownershipType}</p>}
-      </div>
+      </Field>
       {isBank && (
         <div className={styles.checkbox}>
           <input
@@ -87,8 +87,7 @@ function ContractForm({ isBank, onSign }) {
         CREDIT_FIELDS.map((field) => {
           const fieldError = fieldErrors[`credit.${field.name}`];
           return (
-            <div key={field.name} className={styles.field}>
-              <label htmlFor={field.name}>{field.label}</label>
+            <Field key={field.name} id={field.name} label={field.label} error={fieldError}>
               <input
                 id={field.name}
                 name={field.name}
@@ -99,14 +98,13 @@ function ContractForm({ isBank, onSign }) {
                 onChange={handleCreditChange}
                 aria-invalid={Boolean(fieldError)}
               />
-              {fieldError && <p className={styles.fieldError}>{fieldError}</p>}
-            </div>
+            </Field>
           );
         })}
       <Button type="submit" icon={FileSignature} disabled={submitting}>
         {submitting ? "Executando..." : "Executar contrato"}
       </Button>
-    </form>
+    </Card>
   );
 }
 

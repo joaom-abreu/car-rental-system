@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
+import Field from "../Field/Field";
 import EmploymentFields from "../EmploymentFields/EmploymentFields";
 import styles from "./ClientForm.module.css";
 
@@ -59,11 +61,10 @@ function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabe
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+    <Card as="form" className={styles.form} onSubmit={handleSubmit} noValidate>
       {error && <Alert type="error">{error}</Alert>}
       {fields.map((field) => (
-        <div key={field.name} className={styles.field}>
-          <label htmlFor={field.name}>{field.label}</label>
+        <Field key={field.name} id={field.name} label={field.label} error={fieldErrors[field.name]}>
           <input
             id={field.name}
             name={field.name}
@@ -74,8 +75,7 @@ function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabe
             onChange={handleChange}
             aria-invalid={Boolean(fieldErrors[field.name])}
           />
-          {fieldErrors[field.name] && <p className={styles.fieldError}>{fieldErrors[field.name]}</p>}
-        </div>
+        </Field>
       ))}
       <EmploymentFields
         employments={form.employments}
@@ -90,7 +90,7 @@ function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabe
           Cancelar
         </Button>
       )}
-    </form>
+    </Card>
   );
 }
 

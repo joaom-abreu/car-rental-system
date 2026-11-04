@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
+import Field from "../Field/Field";
 import styles from "./AutomobileForm.module.css";
 
 const EMPTY_AUTOMOBILE = { registration: "", year: "", brand: "", model: "", plate: "" };
@@ -39,11 +41,10 @@ function AutomobileForm({ automobile = EMPTY_AUTOMOBILE, onSubmit, onCancel }) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+    <Card as="form" className={styles.form} onSubmit={handleSubmit} noValidate>
       {error && <Alert type="error">{error}</Alert>}
       {FIELDS.map((field) => (
-        <div key={field.name} className={styles.field}>
-          <label htmlFor={field.name}>{field.label}</label>
+        <Field key={field.name} id={field.name} label={field.label} error={fieldErrors[field.name]}>
           <input
             id={field.name}
             name={field.name}
@@ -52,8 +53,7 @@ function AutomobileForm({ automobile = EMPTY_AUTOMOBILE, onSubmit, onCancel }) {
             onChange={handleChange}
             aria-invalid={Boolean(fieldErrors[field.name])}
           />
-          {fieldErrors[field.name] && <p className={styles.fieldError}>{fieldErrors[field.name]}</p>}
-        </div>
+        </Field>
       ))}
       <div className={styles.actions}>
         <Button type="submit" disabled={submitting}>
@@ -63,7 +63,7 @@ function AutomobileForm({ automobile = EMPTY_AUTOMOBILE, onSubmit, onCancel }) {
           Cancelar
         </Button>
       </div>
-    </form>
+    </Card>
   );
 }
 

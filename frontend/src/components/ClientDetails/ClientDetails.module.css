@@ -1,11 +1,3 @@
-.card {
-  padding: var(--space-lg);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-}
-
 .details {
   display: grid;
   grid-template-columns: max-content 1fr;

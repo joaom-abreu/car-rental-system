@@ -1,12 +1,13 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { formatCpf, formatCurrency, formatDate } from "../../utils/formatters";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
 import styles from "./ClientDetails.module.css";
 
 function ClientDetails({ client, onEdit, onDelete, deleteLabel }) {
   return (
     <>
-      <div className={styles.card}>
+      <Card>
         <dl className={styles.details}>
           <dt>Usuário</dt>
           <dd>{client.username}</dd>
@@ -35,7 +36,7 @@ function ClientDetails({ client, onEdit, onDelete, deleteLabel }) {
             ))}
           </ul>
         )}
-      </div>
+      </Card>
       <div className={styles.actions}>
         <Button icon={Pencil} onClick={onEdit}>
           Editar

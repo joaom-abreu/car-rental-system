@@ -4,11 +4,6 @@
 
 .section {
   margin-bottom: var(--space-lg);
-  padding: var(--space-lg);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }
 
 .sectionTitle {
@@ -88,34 +83,6 @@
   max-width: var(--form-wide-max-width);
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.field input,
-.field select,
-.field textarea {
-  padding: var(--space-sm);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.field textarea {
-  resize: vertical;
-}
-
-.field [aria-invalid="true"] {
-  border-color: var(--color-danger);
-}
-
-.fieldError {
-  margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-danger);
-}
-
 .checkbox {
   display: flex;
   align-items: center;
@@ -124,6 +91,4 @@
 
 .tableWrapper {
   overflow-x: auto;
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
 }

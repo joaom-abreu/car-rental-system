@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Alert from "../components/Alert/Alert";
 import AutomobileForm from "../components/AutomobileForm/AutomobileForm";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
 import { useAuth } from "../hooks/useAuth";
 import {
   createAutomobile,
@@ -104,7 +105,7 @@ function AutomobilesPage() {
 
 function AutomobilesTable({ automobiles, showActions, onEdit, onDelete }) {
   return (
-    <div className={styles.tableWrapper}>
+    <Card noPadding className={styles.tableWrapper}>
       <table>
         <thead>
           <tr>
@@ -150,7 +151,7 @@ function AutomobilesTable({ automobiles, showActions, onEdit, onDelete }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </Card>
   );
 }
 

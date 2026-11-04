@@ -2,6 +2,8 @@ import { Check, X } from "lucide-react";
 import { useState } from "react";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
+import Field from "../Field/Field";
 import styles from "./EvaluationForm.module.css";
 
 const OPINION_MAX_LENGTH = 500;
@@ -26,13 +28,12 @@ function EvaluationForm({ onEvaluate }) {
   }
 
   return (
-    <section className={styles.card} aria-labelledby="evaluation-title">
+    <Card as="section" className={styles.card} aria-labelledby="evaluation-title">
       <h2 id="evaluation-title" className={styles.title}>
         Avaliar pedido
       </h2>
       {error && <Alert type="error">{error}</Alert>}
-      <div className={styles.field}>
-        <label htmlFor="opinion">Parecer</label>
+      <Field id="opinion" label="Parecer" error={fieldErrors.opinion}>
         <textarea
           id="opinion"
           rows="4"
@@ -41,8 +42,7 @@ function EvaluationForm({ onEvaluate }) {
           onChange={(event) => setOpinion(event.target.value)}
           aria-invalid={Boolean(fieldErrors.opinion)}
         />
-        {fieldErrors.opinion && <p className={styles.fieldError}>{fieldErrors.opinion}</p>}
-      </div>
+      </Field>
       <div className={styles.actions}>
         <Button variant="success" icon={Check} disabled={submitting} onClick={() => handleEvaluate(true)}>
           Aprovar
@@ -51,7 +51,7 @@ function EvaluationForm({ onEvaluate }) {
           Reprovar
         </Button>
       </div>
-    </section>
+    </Card>
   );
 }
 

@@ -44,10 +44,28 @@ textarea {
   background: var(--color-surface);
 }
 
+input:not([type="checkbox"]),
+select,
+textarea {
+  padding: var(--space-sm);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+textarea {
+  resize: vertical;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--color-primary);
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--color-danger);
 }
 
 table {

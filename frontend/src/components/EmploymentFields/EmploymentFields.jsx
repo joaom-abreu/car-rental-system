@@ -1,5 +1,6 @@
 import { Plus, Trash2 } from "lucide-react";
 import Button from "../Button/Button";
+import Field from "../Field/Field";
 import styles from "./EmploymentFields.module.css";
 
 const MAX_EMPLOYMENTS = 3;
@@ -28,18 +29,15 @@ function EmploymentFields({ employments, onChange, fieldErrors }) {
         const incomeError = fieldErrors[`employments[${index}].income`];
         return (
           <div key={index} className={styles.employment}>
-            <div className={styles.field}>
-              <label htmlFor={`employer-${index}`}>Empregador {index + 1}</label>
+            <Field id={`employer-${index}`} label={`Empregador ${index + 1}`} error={employerError}>
               <input
                 id={`employer-${index}`}
                 value={employment.employer}
                 onChange={(event) => updateEmployment(index, "employer", event.target.value)}
                 aria-invalid={Boolean(employerError)}
               />
-              {employerError && <p className={styles.fieldError}>{employerError}</p>}
-            </div>
-            <div className={styles.field}>
-              <label htmlFor={`income-${index}`}>Rendimento mensal (R$)</label>
+            </Field>
+            <Field id={`income-${index}`} label="Rendimento mensal (R$)" error={incomeError}>
               <input
                 id={`income-${index}`}
                 type="number"
@@ -49,8 +47,7 @@ function EmploymentFields({ employments, onChange, fieldErrors }) {
                 onChange={(event) => updateEmployment(index, "income", event.target.value)}
                 aria-invalid={Boolean(incomeError)}
               />
-              {incomeError && <p className={styles.fieldError}>{incomeError}</p>}
-            </div>
+            </Field>
             <Button
               variant="danger"
               icon={Trash2}
@@ -62,7 +59,7 @@ function EmploymentFields({ employments, onChange, fieldErrors }) {
           </div>
         );
       })}
-      {fieldErrors.employments && <p className={styles.fieldError}>{fieldErrors.employments}</p>}
+      {fieldErrors.employments && <p className={styles.error}>{fieldErrors.employments}</p>}
       {employments.length < MAX_EMPLOYMENTS && (
         <Button variant="secondary" icon={Plus} className={styles.action} onClick={addEmployment}>
           Adicionar emprego

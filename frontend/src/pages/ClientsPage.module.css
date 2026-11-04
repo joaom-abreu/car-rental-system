@@ -13,9 +13,6 @@
 .searchRow input {
   flex: 1;
   min-width: 0;
-  padding: var(--space-sm);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-sm);
 }
 
 .empty {
@@ -24,8 +21,4 @@
 
 .tableWrapper {
   overflow-x: auto;
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }

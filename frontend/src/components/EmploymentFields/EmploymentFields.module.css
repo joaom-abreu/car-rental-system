@@ -21,23 +21,7 @@
   border-bottom: var(--border-width) solid var(--color-border);
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.field input {
-  padding: var(--space-sm);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.field input[aria-invalid="true"] {
-  border-color: var(--color-danger);
-}
-
-.fieldError {
+.error {
   margin: 0;
   font-size: var(--font-size-sm);
   color: var(--color-danger);

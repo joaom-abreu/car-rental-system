@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
 import { searchClients } from "../services/clientService";
 import { formatCpf, formatDate } from "../utils/formatters";
 import styles from "./ClientsPage.module.css";
@@ -53,7 +54,7 @@ function ClientsPage() {
 
 function ClientsTable({ clients }) {
   return (
-    <div className={styles.tableWrapper}>
+    <Card noPadding className={styles.tableWrapper}>
       <table>
         <thead>
           <tr>
@@ -80,7 +81,7 @@ function ClientsTable({ clients }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </Card>
   );
 }
 
