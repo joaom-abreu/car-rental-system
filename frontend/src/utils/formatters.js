@@ -1,6 +1,7 @@
 const CPF_PATTERN = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
 const LOCAL_DATE_PATTERN = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 const DATE_DIGITS = 8;
+const CEP_DIGITS = 8;
 const currencyFormatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo" });
 
@@ -23,6 +24,15 @@ export function formatLocalDate(date) {
 
 export function formatHolidays(holidays) {
   return holidays.map((holiday) => `${holiday.name} (${formatLocalDate(holiday.date)})`).join(", ");
+}
+
+export function maskCep(value) {
+  const digits = value.replace(/\D/g, "").slice(0, CEP_DIGITS);
+  return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+}
+
+export function formatAddress(address) {
+  return [address.street, address.neighborhood, `${address.city} - ${address.state}`].filter(Boolean).join(", ");
 }
 
 export function maskLocalDate(value) {

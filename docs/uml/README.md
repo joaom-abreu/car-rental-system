@@ -44,6 +44,8 @@ O pedido de aluguel passou a avisar quando o período inclui feriados nacionais.
 
 O back-end não mudou. Os casos de uso também continuam os mesmos: o aviso de feriado é uma informação dentro de "Criar pedido", "Modificar pedido" e "Consultar pedidos", não um caso de uso novo.
 
+Depois, o cadastro e o perfil passaram a preencher o endereço pelo CEP, também pela BrasilAPI. O componente `CepField` (em `components`) chama o mesmo `brasilApiService`, então a seta `services → BrasilAPI` já cobre esse uso e o diagrama da v4 continua valendo. O CEP só ajuda a preencher o campo de endereço e não é salvo, por isso o diagrama de classes também não muda.
+
 ## Casos de uso → histórias de usuário
 
 As histórias estão em [`docs/historias-de-usuario.md`](../historias-de-usuario.md).

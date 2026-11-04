@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
 import Card from "../Card/Card";
+import CepField from "../CepField/CepField";
 import Field from "../Field/Field";
 import EmploymentFields from "../EmploymentFields/EmploymentFields";
 import styles from "./ClientForm.module.css";
@@ -16,6 +17,8 @@ const EMPTY_CLIENT = {
   profession: "",
   employments: [],
 };
+
+const ADDRESS_FIELD = "address";
 
 const CREDENTIAL_FIELDS = [
   { name: "username", label: "Usuário", autoComplete: "username" },
@@ -42,6 +45,10 @@ function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabe
     setForm((currentForm) => ({ ...currentForm, [name]: value }));
   }
 
+  function handleAddressFound(address) {
+    setForm((currentForm) => ({ ...currentForm, address }));
+  }
+
   function handleEmploymentsChange(employments) {
     setForm((currentForm) => ({ ...currentForm, employments }));
   }
@@ -64,18 +71,21 @@ function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabe
     <Card as="form" className={styles.form} onSubmit={handleSubmit} noValidate>
       {error && <Alert type="error">{error}</Alert>}
       {fields.map((field) => (
-        <Field key={field.name} id={field.name} label={field.label} error={fieldErrors[field.name]}>
-          <input
-            id={field.name}
-            name={field.name}
-            type={field.type ?? "text"}
-            autoComplete={field.autoComplete}
-            inputMode={field.inputMode}
-            value={form[field.name]}
-            onChange={handleChange}
-            aria-invalid={Boolean(fieldErrors[field.name])}
-          />
-        </Field>
+        <Fragment key={field.name}>
+          {field.name === ADDRESS_FIELD && <CepField onAddressFound={handleAddressFound} />}
+          <Field id={field.name} label={field.label} error={fieldErrors[field.name]}>
+            <input
+              id={field.name}
+              name={field.name}
+              type={field.type ?? "text"}
+              autoComplete={field.autoComplete}
+              inputMode={field.inputMode}
+              value={form[field.name]}
+              onChange={handleChange}
+              aria-invalid={Boolean(fieldErrors[field.name])}
+            />
+          </Field>
+        </Fragment>
       ))}
       <EmploymentFields
         employments={form.employments}

@@ -402,6 +402,9 @@ function ComponentsSection() {
         <Field id="ds-cpf" label="CPF" error="CPF inválido.">
           <input id="ds-cpf" defaultValue="111.111.111-11" aria-invalid="true" />
         </Field>
+        <Field id="ds-cep" label="CEP (opcional)" hint="Digite o CEP para preencher o endereço.">
+          <input id="ds-cep" placeholder="00000-000" />
+        </Field>
       </div>
       <h3 className={styles.subtitle}>Alert</h3>
       <div>

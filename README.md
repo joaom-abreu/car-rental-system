@@ -82,7 +82,7 @@ Na segunda etapa, o front-end ganhou um **design system**: paleta montada a part
 ## ✨ Funcionalidades
 
 - 🔐 **Cadastro e login** com usuário e senha (JWT). O cliente se cadastra; os agentes já vêm criados.
-- 👤 **Perfil do cliente** com RG, CPF, endereço, profissão e até 3 empregos com rendimento. O cliente edita os dados e pode excluir a conta.
+- 👤 **Perfil do cliente** com RG, CPF, endereço, profissão e até 3 empregos com rendimento. O cliente edita os dados e pode excluir a conta. No cadastro e no perfil, o endereço pode ser preenchido pelo CEP (BrasilAPI).
 - 📝 **Pedidos de aluguel:** o cliente escolhe o automóvel e o período, acompanha o status e pode modificar (em análise) ou cancelar (em análise ou aprovado).
 - 📅 **Feriados no período:** ao escolher as datas, e no detalhe do pedido, o sistema avisa quais feriados nacionais caem no aluguel, consultando a BrasilAPI.
 - ✅ **Avaliação financeira:** o agente aprova ou reprova o pedido com um parecer. Um automóvel não pode ter dois pedidos aprovados no mesmo período.
@@ -104,7 +104,7 @@ Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancel
 - **React 19** com **Vite 8** e **React Router 7**
 - **JavaScript** e **CSS Modules**, com tokens de cor e espaçamento em `styles/tokens.css` (tema claro e escuro)
 - **lucide-react** para os ícones
-- **BrasilAPI** para os feriados nacionais (API pública, chamada direto pelo navegador)
+- **BrasilAPI** para os feriados nacionais e o endereço pelo CEP (API pública, chamada direto pelo navegador)
 - Fontes **Chakra Petch** (logo e títulos) e **Inter** (texto), do Google Fonts
 - **oxlint** para o lint
 
@@ -136,7 +136,7 @@ O sistema segue o padrão **MVC** e é dividido em dois subsistemas, que só con
 - **Construção dinâmica das páginas** (`frontend/`): é a **View**. As páginas em React chamam a API só pela camada de `services`. O visual sai de componentes reutilizáveis (`Button`, `Field`, `Card`, `Alert`, `StatusBadge`, `Logo`), que usam só os tokens de `styles/tokens.css`.
 - **Gestão de pedidos e contratos** (`backend/`): os **Controllers** recebem as requisições e devolvem DTOs, os **Services** aplicam as regras de negócio e a checagem de dono e de perfil, e o **Model** (entidades e repositórios) guarda os dados no Supabase. As regras de mudança de status ficam nos métodos da própria entidade `RentalRequest` (`approve`, `reject`, `cancel`, `markAsContracted`).
 
-O navegador nunca acessa o banco: só o back-end fala com o Supabase. A única chamada que sai do front para fora do sistema é a da BrasilAPI (feriados), feita sem o token de login.
+O navegador nunca acessa o banco: só o back-end fala com o Supabase. As únicas chamadas que saem do front para fora do sistema são as da BrasilAPI (feriados e CEP), feitas sem o token de login.
 
 ### Diagramas atuais
 
@@ -302,7 +302,7 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
 
 | Login | Cadastro de cliente |
 | :---: | :---: |
-| <img src="./docs/screenshots/login.png" alt="Tela de login" width="420"> | <img src="./docs/screenshots/cadastro.png" alt="Tela de cadastro de cliente com um emprego" width="420"> |
+| <img src="./docs/screenshots/login.png" alt="Tela de login" width="420"> | <img src="./docs/screenshots/cadastro.png" alt="Tela de cadastro de cliente com o endereço preenchido pelo CEP e um emprego" width="420"> |
 
 | Pedidos do cliente | Detalhe com avaliação e contrato |
 | :---: | :---: |
