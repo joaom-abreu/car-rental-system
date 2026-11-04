@@ -14,9 +14,9 @@
 
 ## 🚧 Status do Projeto
 
-[![CI](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml/badge.svg)](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml) [![Versão](https://img.shields.io/badge/Versão-v1.0.0-blue)](https://github.com/joaom-abreu/car-rental-system/releases) [![Licença](https://img.shields.io/github/license/joaom-abreu/car-rental-system)](#-licença)
+[![CI](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml/badge.svg)](https://github.com/joaom-abreu/car-rental-system/actions/workflows/ci.yml) [![Versão](https://img.shields.io/badge/Versão-v1.0.0-d11a29)](https://github.com/joaom-abreu/car-rental-system/releases) [![Licença](https://img.shields.io/github/license/joaom-abreu/car-rental-system)](#-licença)
 
-![Java](https://img.shields.io/badge/Java-25-007ec6?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.1.2-007ec6?style=for-the-badge&logo=springboot&logoColor=white) ![React](https://img.shields.io/badge/React-19.3-007ec6?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-8.3-007ec6?style=for-the-badge&logo=vite&logoColor=white) ![React Router](https://img.shields.io/badge/React_Router-7.18-007ec6?style=for-the-badge&logo=reactrouter&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-007ec6?style=for-the-badge&logo=supabase&logoColor=white) ![GitHub last commit](https://img.shields.io/github/last-commit/joaom-abreu/car-rental-system?style=for-the-badge&logo=git&logoColor=white&color=007ec6)
+![Java](https://img.shields.io/badge/Java-25-d11a29?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.1.2-d11a29?style=for-the-badge&logo=springboot&logoColor=white) ![React](https://img.shields.io/badge/React-19.3-d11a29?style=for-the-badge&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-8.3-d11a29?style=for-the-badge&logo=vite&logoColor=white) ![React Router](https://img.shields.io/badge/React_Router-7.18-d11a29?style=for-the-badge&logo=reactrouter&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-d11a29?style=for-the-badge&logo=supabase&logoColor=white) ![GitHub last commit](https://img.shields.io/github/last-commit/joaom-abreu/car-rental-system?style=for-the-badge&logo=git&logoColor=white&color=d11a29)
 
 ---
 
@@ -57,7 +57,7 @@ Use estas contas para testar a aplicação online. Os dados são fictícios.
 | Banco (agente) | `banco` | `aluguel2026` | O mesmo da locadora, mais a concessão de contrato de crédito |
 | Cliente | `cliente.demo` | `aluguel2026` | Criar, modificar, consultar e cancelar pedidos e editar o perfil |
 
-Também dá para criar um cliente novo na tela **Cadastre-se**.
+O `cliente.demo` já tem um pedido em cada status, e o contratado tem crédito do banco. Também dá para criar um cliente novo na tela **Cadastre-se**.
 
 > [!WARNING]
 > Estas contas são públicas. Se for se cadastrar, use dados fictícios: os agentes veem os dados de todos os clientes.
@@ -74,6 +74,8 @@ Este é o LAB02 de Desenvolvimento e Integração de Aplicações Web (DIAW), na
 O sistema só pode ser usado após cadastro e login. **Clientes** pedem o aluguel de um automóvel e acompanham o status do pedido. **Agentes** (uma locadora e um banco, já cadastrados) avaliam os pedidos e executam os contratos. Ao executar o contrato, o automóvel fica registrado como propriedade do cliente, da empresa ou do banco.
 
 A modelagem veio antes do código: histórias de usuário e diagramas de casos de uso, classes e pacotes (v1). No fim, os diagramas foram refeitos a partir do código (v2), e as diferenças estão explicadas em [`docs/uml/README.md`](./docs/uml/README.md). As classes, os atributos, os enums e os pacotes dos diagramas têm os mesmos nomes do código.
+
+Na segunda etapa, o front-end ganhou um **design system**: paleta montada a partir do círculo cromático, tema claro e escuro, tipografia, componentes reutilizáveis e regras de acessibilidade, tudo documentado na página [`/design`](https://aluguel-carros.vercel.app/design).
 
 ---
 
@@ -129,7 +131,7 @@ Os status do pedido são: **Em análise**, **Aprovado**, **Reprovado**, **Cancel
 
 O sistema segue o padrão **MVC** e é dividido em dois subsistemas, que só conversam por HTTP/JSON:
 
-- **Construção dinâmica das páginas** (`frontend/`): é a **View**. As páginas em React chamam a API só pela camada de `services`.
+- **Construção dinâmica das páginas** (`frontend/`): é a **View**. As páginas em React chamam a API só pela camada de `services`. O visual sai de componentes reutilizáveis (`Button`, `Field`, `Card`, `Alert`, `StatusBadge`, `Logo`), que usam só os tokens de `styles/tokens.css`.
 - **Gestão de pedidos e contratos** (`backend/`): os **Controllers** recebem as requisições e devolvem DTOs, os **Services** aplicam as regras de negócio e a checagem de dono e de perfil, e o **Model** (entidades e repositórios) guarda os dados no Supabase. As regras de mudança de status ficam nos métodos da própria entidade `RentalRequest` (`approve`, `reject`, `cancel`, `markAsContracted`).
 
 O navegador nunca acessa o banco: só o back-end fala com o Supabase.
@@ -280,14 +282,14 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
     ├── vercel.json                 # 🔀 Rotas do React na Vercel.
     └── src/
         ├── pages/                  # 📄 Telas.
-        ├── components/             # 🧩 Formulários, tabelas e peças reutilizáveis.
-        ├── services/               # 🔌 Chamadas à API (o único lugar com fetch).
+        ├── components/             # 🧩 Button, Field, Card, Logo, formulários e outras peças reutilizáveis.
+        ├── services/               # 🔌 Chamadas à API (o único lugar com fetch) e o que fica salvo no navegador.
         ├── contexts/               # 👤 Sessão do usuário.
-        ├── hooks/                  # 🪝 useAuth.
-        ├── constants/              # 🏷️ Rótulos de status e de propriedade.
-        ├── utils/                  # 🧮 Formatação de datas, CPF, moeda e porcentagem.
+        ├── hooks/                  # 🪝 useAuth e useTheme.
+        ├── constants/              # 🏷️ Rótulos de status e de propriedade, temas e dados do design system.
+        ├── utils/                  # 🧮 Formatação e máscara de datas, CPF, moeda e porcentagem, e leitura de tokens.
         ├── config/                 # ⚙️ Endereço da API.
-        └── styles/                 # 🎨 Tokens e estilos globais.
+        └── styles/                 # 🎨 Tokens (cores, fontes e medidas dos dois temas) e estilos globais.
 ```
 
 ---
@@ -304,7 +306,11 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
 
 | Clientes (visão do agente) | Automóveis (visão do agente) |
 | :---: | :---: |
-| <img src="./docs/screenshots/clientes.png" alt="Lista de clientes com busca por nome ou CPF" width="420"> | <img src="./docs/screenshots/automoveis.png" alt="Lista de automóveis com o proprietário de cada um" width="420"> |
+| <img src="./docs/screenshots/clientes.png" alt="Lista de clientes com busca por nome ou CPF" width="420"> | <img src="./docs/screenshots/automoveis.png" alt="Lista de automóveis com o proprietário de cada um, com o Onix já do Banco Pampulha" width="420"> |
+
+| Tema escuro (visão do agente) | Design system |
+| :---: | :---: |
+| <img src="./docs/screenshots/pedidos-escuro.png" alt="Lista de todos os pedidos no tema escuro, vista pelo banco" width="420"> | <img src="./docs/screenshots/design-system.png" alt="Início da página de design system, com a logo nos temas claro e escuro" width="420"> |
 
 | Swagger |
 | :---: |
@@ -383,6 +389,9 @@ O **GitHub Actions** roda os testes do back-end e o lint e o build do front-end 
 - [React](https://react.dev/)
 - [React Router](https://reactrouter.com/)
 - [Vite](https://vite.dev/)
+- [Lucide](https://lucide.dev/guide/packages/lucide-react)
+- [Google Fonts](https://fonts.google.com/)
+- [WCAG 2.1: contraste mínimo](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
 - [Supabase](https://supabase.com/docs)
 - [PlantUML](https://plantuml.com/)
 - [GitHub Actions](https://docs.github.com/actions)
