@@ -1,6 +1,8 @@
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
+import Button from "../components/Button/Button";
 import { searchClients } from "../services/clientService";
 import { formatCpf, formatDate } from "../utils/formatters";
 import styles from "./ClientsPage.module.css";
@@ -37,7 +39,9 @@ function ClientsPage() {
         <label htmlFor="search">Buscar por nome ou CPF</label>
         <div className={styles.searchRow}>
           <input id="search" value={search} onChange={(event) => setSearch(event.target.value)} />
-          <button type="submit">Buscar</button>
+          <Button type="submit" icon={Search}>
+            Buscar
+          </Button>
         </div>
       </form>
       {!clients && !error && <p>Carregando...</p>}

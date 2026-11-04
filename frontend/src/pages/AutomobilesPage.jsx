@@ -1,6 +1,8 @@
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Alert from "../components/Alert/Alert";
 import AutomobileForm from "../components/AutomobileForm/AutomobileForm";
+import Button from "../components/Button/Button";
 import { useAuth } from "../hooks/useAuth";
 import {
   createAutomobile,
@@ -68,9 +70,9 @@ function AutomobilesPage() {
       <div className={styles.header}>
         <h1>Automóveis</h1>
         {isAgent && !formAutomobile && (
-          <button type="button" className={styles.newButton} onClick={() => openForm(NEW_AUTOMOBILE)}>
+          <Button icon={Plus} onClick={() => openForm(NEW_AUTOMOBILE)}>
             Novo automóvel
-          </button>
+          </Button>
         )}
       </div>
       {error && <Alert type="error">{error}</Alert>}
@@ -127,12 +129,20 @@ function AutomobilesTable({ automobiles, showActions, onEdit, onDelete }) {
               {showActions && (
                 <td>
                   <div className={styles.actions}>
-                    <button type="button" className={styles.linkButton} onClick={() => onEdit(automobile)}>
-                      Editar
-                    </button>
-                    <button type="button" className={styles.dangerLinkButton} onClick={() => onDelete(automobile)}>
-                      Excluir
-                    </button>
+                    <Button
+                      variant="ghost"
+                      icon={Pencil}
+                      aria-label={`Editar ${automobile.plate}`}
+                      title="Editar"
+                      onClick={() => onEdit(automobile)}
+                    />
+                    <Button
+                      variant="danger"
+                      icon={Trash2}
+                      aria-label={`Excluir ${automobile.plate}`}
+                      title="Excluir"
+                      onClick={() => onDelete(automobile)}
+                    />
                   </div>
                 </td>
               )}

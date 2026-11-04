@@ -1,6 +1,8 @@
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
+import Button from "../components/Button/Button";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import { REQUEST_STATUS_LABELS, REQUEST_STATUSES } from "../constants/requestStatus";
 import { useAuth } from "../hooks/useAuth";
@@ -36,9 +38,9 @@ function RequestsPage() {
       <div className={styles.header}>
         <h1>Pedidos</h1>
         {isClient && (
-          <Link to="/pedidos/novo" className={styles.newButton}>
+          <Button to="/pedidos/novo" icon={Plus}>
             Novo pedido
-          </Link>
+          </Button>
         )}
       </div>
       {successMessage && <Alert type="success">{successMessage}</Alert>}

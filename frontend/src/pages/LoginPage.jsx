@@ -1,6 +1,8 @@
+import { LogIn } from "lucide-react";
 import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
+import Button from "../components/Button/Button";
 import { useAuth } from "../hooks/useAuth";
 import styles from "./LoginPage.module.css";
 
@@ -69,9 +71,9 @@ function LoginPage() {
           />
           {fieldErrors.password && <p className={styles.fieldError}>{fieldErrors.password}</p>}
         </div>
-        <button type="submit" className={styles.submit} disabled={submitting}>
+        <Button type="submit" icon={LogIn} disabled={submitting}>
           {submitting ? "Entrando..." : "Entrar"}
-        </button>
+        </Button>
       </form>
       <p className={styles.signUpLink}>
         Ainda não tem conta? <Link to="/cadastro">Criar conta</Link>

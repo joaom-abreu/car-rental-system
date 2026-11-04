@@ -43,22 +43,3 @@
   gap: var(--space-sm);
   margin-top: var(--space-md);
 }
-
-.editButton,
-.deleteButton {
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.editButton {
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  border: none;
-}
-
-.deleteButton {
-  color: var(--color-danger);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-danger);
-}

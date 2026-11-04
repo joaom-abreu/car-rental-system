@@ -37,27 +37,3 @@
   flex-wrap: wrap;
   gap: var(--space-sm);
 }
-
-.submit,
-.cancel {
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.submit {
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  border: none;
-}
-
-.submit:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.cancel {
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-}

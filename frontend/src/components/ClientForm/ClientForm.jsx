@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
 import EmploymentFields from "../EmploymentFields/EmploymentFields";
 import styles from "./ClientForm.module.css";
 
@@ -81,13 +82,13 @@ function ClientForm({ client = EMPTY_CLIENT, withCredentials = false, submitLabe
         onChange={handleEmploymentsChange}
         fieldErrors={fieldErrors}
       />
-      <button type="submit" className={styles.submit} disabled={submitting}>
+      <Button type="submit" disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
-      </button>
+      </Button>
       {onCancel && (
-        <button type="button" className={styles.cancel} onClick={onCancel}>
+        <Button variant="secondary" onClick={onCancel}>
           Cancelar
-        </button>
+        </Button>
       )}
     </form>
   );

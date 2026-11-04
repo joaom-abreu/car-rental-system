@@ -18,15 +18,6 @@
   border-radius: var(--radius-sm);
 }
 
-.searchRow button {
-  padding: var(--space-sm) var(--space-md);
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
 .empty {
   color: var(--color-text-secondary);
 }

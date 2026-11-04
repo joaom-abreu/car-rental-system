@@ -62,16 +62,3 @@
 .userName {
   color: var(--color-text-secondary);
 }
-
-.headerButton {
-  padding: var(--space-xs) var(--space-sm);
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.headerButton svg {
-  vertical-align: middle;
-}

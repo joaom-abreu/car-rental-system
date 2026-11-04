@@ -50,14 +50,6 @@ textarea:focus {
   border-color: var(--color-primary);
 }
 
-button {
-  transition: opacity 0.15s;
-}
-
-button:hover:not(:disabled) {
-  opacity: 0.85;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;

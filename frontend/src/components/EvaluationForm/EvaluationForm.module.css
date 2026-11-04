@@ -43,26 +43,3 @@
   flex-wrap: wrap;
   gap: var(--space-sm);
 }
-
-.approveButton,
-.rejectButton {
-  padding: var(--space-sm) var(--space-md);
-  color: var(--color-on-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.approveButton {
-  background: var(--color-success);
-}
-
-.rejectButton {
-  background: var(--color-danger);
-}
-
-.approveButton:disabled,
-.rejectButton:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}

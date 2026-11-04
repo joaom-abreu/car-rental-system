@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { formatLocalDate, maskLocalDate, parseLocalDate } from "../../utils/formatters";
 import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
 import styles from "./RequestForm.module.css";
 
 const EMPTY_REQUEST = { automobileId: "", startDate: "", endDate: "" };
@@ -84,13 +85,13 @@ function RequestForm({ automobiles, rentalRequest, submitLabel, onSubmit, onCanc
           {fieldErrors[field.name] && <p className={styles.fieldError}>{fieldErrors[field.name]}</p>}
         </div>
       ))}
-      <button type="submit" className={styles.submit} disabled={submitting}>
+      <Button type="submit" disabled={submitting}>
         {submitting ? "Salvando..." : submitLabel}
-      </button>
+      </Button>
       {onCancel && (
-        <button type="button" className={styles.cancel} onClick={onCancel}>
+        <Button variant="secondary" onClick={onCancel}>
           Cancelar
-        </button>
+        </Button>
       )}
     </form>
   );

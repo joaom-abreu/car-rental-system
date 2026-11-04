@@ -43,21 +43,6 @@
   color: var(--color-danger);
 }
 
-.add,
-.remove {
+.action {
   align-self: flex-start;
-  padding: var(--space-xs) var(--space-md);
-  background: var(--color-surface);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.add {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.remove {
-  color: var(--color-danger);
 }

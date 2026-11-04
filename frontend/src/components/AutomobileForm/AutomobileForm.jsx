@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
 import styles from "./AutomobileForm.module.css";
 
 const EMPTY_AUTOMOBILE = { registration: "", year: "", brand: "", model: "", plate: "" };
@@ -55,12 +56,12 @@ function AutomobileForm({ automobile = EMPTY_AUTOMOBILE, onSubmit, onCancel }) {
         </div>
       ))}
       <div className={styles.actions}>
-        <button type="submit" className={styles.submit} disabled={submitting}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? "Salvando..." : "Salvar"}
-        </button>
-        <button type="button" className={styles.cancel} onClick={onCancel}>
+        </Button>
+        <Button variant="secondary" onClick={onCancel}>
           Cancelar
-        </button>
+        </Button>
       </div>
     </form>
   );

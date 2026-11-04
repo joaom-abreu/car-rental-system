@@ -1,6 +1,8 @@
+import { Ban, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Alert from "../components/Alert/Alert";
+import Button from "../components/Button/Button";
 import ContractForm from "../components/ContractForm/ContractForm";
 import EvaluationForm from "../components/EvaluationForm/EvaluationForm";
 import RequestForm from "../components/RequestForm/RequestForm";
@@ -131,14 +133,14 @@ function RequestDetailPage() {
           <RequestDetails rentalRequest={rentalRequest} />
           <div className={styles.actions}>
             {canEdit(rentalRequest) && (
-              <button type="button" className={styles.editButton} onClick={startEditing}>
+              <Button icon={Pencil} onClick={startEditing}>
                 Editar
-              </button>
+              </Button>
             )}
             {canCancel(rentalRequest, isClient) && (
-              <button type="button" className={styles.cancelButton} onClick={handleCancelRequest}>
+              <Button variant="danger" icon={Ban} onClick={handleCancelRequest}>
                 Cancelar pedido
-              </button>
+              </Button>
             )}
           </div>
           {canEvaluate(rentalRequest, isAgent) && <EvaluationForm onEvaluate={handleEvaluate} />}

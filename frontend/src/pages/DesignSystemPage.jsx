@@ -1,4 +1,6 @@
+import { Check, Moon, Pencil, Plus, Trash2 } from "lucide-react";
 import Alert from "../components/Alert/Alert";
+import Button from "../components/Button/Button";
 import StatusBadge from "../components/StatusBadge/StatusBadge";
 import { REQUEST_STATUSES } from "../constants/requestStatus";
 import styles from "./DesignSystemPage.module.css";
@@ -133,27 +135,17 @@ function ButtonsSection() {
   return (
     <Section title="Botões">
       <div className={styles.row}>
-        <button type="button" className={styles.primaryButton}>
-          Salvar
-        </button>
-        <button type="button" className={styles.secondaryButton}>
-          Cancelar
-        </button>
-        <button type="button" className={styles.dangerOutlineButton}>
+        <Button icon={Plus}>Novo pedido</Button>
+        <Button variant="secondary">Cancelar</Button>
+        <Button variant="danger" icon={Trash2}>
           Excluir conta
-        </button>
-        <button type="button" className={styles.successButton}>
+        </Button>
+        <Button variant="success" icon={Check}>
           Aprovar
-        </button>
-        <button type="button" className={styles.dangerButton}>
-          Reprovar
-        </button>
-        <button type="button" className={styles.linkButton}>
-          Editar
-        </button>
-        <button type="button" className={styles.primaryButton} disabled>
-          Salvando...
-        </button>
+        </Button>
+        <Button variant="ghost" icon={Pencil} aria-label="Editar" />
+        <Button variant="secondary" icon={Moon} aria-label="Usar tema escuro" />
+        <Button disabled>Salvando...</Button>
       </div>
     </Section>
   );

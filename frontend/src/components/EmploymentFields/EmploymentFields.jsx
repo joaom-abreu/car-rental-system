@@ -1,3 +1,5 @@
+import { Plus, Trash2 } from "lucide-react";
+import Button from "../Button/Button";
 import styles from "./EmploymentFields.module.css";
 
 const MAX_EMPLOYMENTS = 3;
@@ -49,17 +51,22 @@ function EmploymentFields({ employments, onChange, fieldErrors }) {
               />
               {incomeError && <p className={styles.fieldError}>{incomeError}</p>}
             </div>
-            <button type="button" className={styles.remove} onClick={() => removeEmployment(index)}>
+            <Button
+              variant="danger"
+              icon={Trash2}
+              className={styles.action}
+              onClick={() => removeEmployment(index)}
+            >
               Remover emprego {index + 1}
-            </button>
+            </Button>
           </div>
         );
       })}
       {fieldErrors.employments && <p className={styles.fieldError}>{fieldErrors.employments}</p>}
       {employments.length < MAX_EMPLOYMENTS && (
-        <button type="button" className={styles.add} onClick={addEmployment}>
+        <Button variant="secondary" icon={Plus} className={styles.action} onClick={addEmployment}>
           Adicionar emprego
-        </button>
+        </Button>
       )}
     </fieldset>
   );

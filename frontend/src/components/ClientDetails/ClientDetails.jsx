@@ -1,4 +1,6 @@
+import { Pencil, Trash2 } from "lucide-react";
 import { formatCpf, formatCurrency, formatDate } from "../../utils/formatters";
+import Button from "../Button/Button";
 import styles from "./ClientDetails.module.css";
 
 function ClientDetails({ client, onEdit, onDelete, deleteLabel }) {
@@ -35,12 +37,12 @@ function ClientDetails({ client, onEdit, onDelete, deleteLabel }) {
         )}
       </div>
       <div className={styles.actions}>
-        <button type="button" className={styles.editButton} onClick={onEdit}>
+        <Button icon={Pencil} onClick={onEdit}>
           Editar
-        </button>
-        <button type="button" className={styles.deleteButton} onClick={onDelete}>
+        </Button>
+        <Button variant="danger" icon={Trash2} onClick={onDelete}>
           {deleteLabel}
-        </button>
+        </Button>
       </div>
     </>
   );

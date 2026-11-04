@@ -1,11 +1,10 @@
-import { Moon, Sun } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
+import Button from "../Button/Button";
 import Logo from "../Logo/Logo";
 import styles from "./Layout.module.css";
-
-const ICON_SIZE = 18;
 
 const GUEST_LINKS = [
   { to: "/login", label: "Entrar" },
@@ -59,18 +58,16 @@ function Layout() {
           </nav>
           <div className={styles.userArea}>
             {user && <span className={styles.userName}>{user.name}</span>}
-            <button
-              type="button"
-              className={styles.headerButton}
-              onClick={toggleTheme}
+            <Button
+              variant="secondary"
+              icon={isDark ? Sun : Moon}
               aria-label={isDark ? "Usar tema claro" : "Usar tema escuro"}
-            >
-              {isDark ? <Sun size={ICON_SIZE} /> : <Moon size={ICON_SIZE} />}
-            </button>
+              onClick={toggleTheme}
+            />
             {user && (
-              <button type="button" className={styles.headerButton} onClick={handleLogout}>
+              <Button variant="secondary" icon={LogOut} onClick={handleLogout}>
                 Sair
-              </button>
+              </Button>
             )}
           </div>
         </div>

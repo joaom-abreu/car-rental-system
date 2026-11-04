@@ -1,5 +1,7 @@
+import { Check, X } from "lucide-react";
 import { useState } from "react";
 import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
 import styles from "./EvaluationForm.module.css";
 
 const OPINION_MAX_LENGTH = 500;
@@ -42,22 +44,12 @@ function EvaluationForm({ onEvaluate }) {
         {fieldErrors.opinion && <p className={styles.fieldError}>{fieldErrors.opinion}</p>}
       </div>
       <div className={styles.actions}>
-        <button
-          type="button"
-          className={styles.approveButton}
-          disabled={submitting}
-          onClick={() => handleEvaluate(true)}
-        >
+        <Button variant="success" icon={Check} disabled={submitting} onClick={() => handleEvaluate(true)}>
           Aprovar
-        </button>
-        <button
-          type="button"
-          className={styles.rejectButton}
-          disabled={submitting}
-          onClick={() => handleEvaluate(false)}
-        >
+        </Button>
+        <Button variant="danger" icon={X} disabled={submitting} onClick={() => handleEvaluate(false)}>
           Reprovar
-        </button>
+        </Button>
       </div>
     </section>
   );

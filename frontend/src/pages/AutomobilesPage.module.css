@@ -6,16 +6,6 @@
   gap: var(--space-sm);
 }
 
-.newButton {
-  margin-bottom: var(--space-md);
-  padding: var(--space-sm) var(--space-md);
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
 .formArea {
   margin-bottom: var(--space-lg);
 }
@@ -40,21 +30,4 @@
 .actions {
   display: flex;
   gap: var(--space-md);
-}
-
-.linkButton,
-.dangerLinkButton {
-  padding: 0;
-  background: none;
-  border: none;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.linkButton {
-  color: var(--color-primary);
-}
-
-.dangerLinkButton {
-  color: var(--color-danger);
 }

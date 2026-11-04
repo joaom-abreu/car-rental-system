@@ -1,6 +1,8 @@
+import { FileSignature } from "lucide-react";
 import { useState } from "react";
 import { BANK_OWNERSHIP, OWNERSHIP_TYPE_LABELS } from "../../constants/ownershipType";
 import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
 import styles from "./ContractForm.module.css";
 
 const EMPTY_CREDIT = { amount: "", monthlyInterestRate: "", installments: "" };
@@ -101,9 +103,9 @@ function ContractForm({ isBank, onSign }) {
             </div>
           );
         })}
-      <button type="submit" className={styles.submit} disabled={submitting}>
+      <Button type="submit" icon={FileSignature} disabled={submitting}>
         {submitting ? "Executando..." : "Executar contrato"}
-      </button>
+      </Button>
     </form>
   );
 }
