@@ -42,7 +42,8 @@
   --color-primary: var(--neutral-900);
   --color-on-primary: var(--neutral-0);
   --color-accent: var(--red-600);
-  --color-on-accent: var(--neutral-0);
+  --color-brand: var(--red-600);
+  --color-on-brand: var(--neutral-0);
   --color-success: var(--green-800);
   --color-warning: var(--amber-800);
   --color-danger: var(--red-600);
@@ -89,7 +90,6 @@
   --color-primary: var(--neutral-100);
   --color-on-primary: var(--neutral-950);
   --color-accent: var(--red-300);
-  --color-on-accent: var(--neutral-950);
   --color-success: var(--green-400);
   --color-warning: var(--amber-400);
   --color-danger: var(--red-300);
