@@ -318,6 +318,78 @@ Depois do primeiro deploy na Vercel, coloque a URL dela em `CORS_ALLOWED_ORIGINS
 | :---: |
 | <img src="./docs/screenshots/swagger.png" alt="Documentação da API no Swagger" width="600"> |
 
+### 💻 Exemplo de chamada da API (cURL)
+
+O login devolve o token JWT, que depois vai no cabeçalho `Authorization` das outras chamadas. As saídas abaixo são reais, da API publicada, com a conta de demonstração do cliente.
+
+```bash
+# Faz login com a conta de demonstração do cliente
+curl -X POST 'https://car-rental-system-h9qt.onrender.com/api/auth/login' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "cliente.demo", "password": "aluguel2026"}'
+```
+
+**Saída esperada** (token encurtado):
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": 19,
+    "username": "cliente.demo",
+    "name": "Cliente Demonstração",
+    "role": "CLIENT",
+    "agentType": null
+  }
+}
+```
+
+```bash
+# Busca o pedido 22, contratado com crédito do banco, usando o token do login
+curl -X GET 'https://car-rental-system-h9qt.onrender.com/api/rental-requests/22' \
+     -H 'Authorization: Bearer <token-do-login>'
+```
+
+**Saída esperada:**
+```json
+{
+  "id": 22,
+  "status": "CONTRACTED",
+  "startDate": "2026-12-10",
+  "endDate": "2026-12-15",
+  "createdAt": "2026-11-04T22:58:29.009493Z",
+  "updatedAt": "2026-11-04T22:58:35.504834Z",
+  "client": {
+    "id": 19,
+    "name": "Cliente Demonstração",
+    "cpf": "11144477735"
+  },
+  "automobile": {
+    "id": 3,
+    "brand": "Chevrolet",
+    "model": "Onix",
+    "year": 2024,
+    "plate": "SAV3C45"
+  },
+  "evaluation": {
+    "agentName": "Banco Pampulha",
+    "opinion": "Renda de R$ 5.000,00 compatível com o valor do aluguel. Crédito aprovado pelo banco.",
+    "evaluatedAt": "2026-11-04T22:58:33.846337Z"
+  },
+  "contract": {
+    "id": 5,
+    "ownershipType": "BANK",
+    "signedByName": "Banco Pampulha",
+    "signedAt": "2026-11-04T22:58:35.703894Z",
+    "credit": {
+      "bankName": "Banco Pampulha",
+      "amount": 8500.0,
+      "monthlyInterestRate": 1.5,
+      "installments": 12
+    }
+  }
+}
+```
+
 ---
 
 ## 🔌 Endpoints da API
