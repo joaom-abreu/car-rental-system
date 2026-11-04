@@ -2,6 +2,7 @@ import { Moon, Sun } from "lucide-react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
+import Logo from "../Logo/Logo";
 import styles from "./Layout.module.css";
 
 const ICON_SIZE = 18;
@@ -43,7 +44,7 @@ function Layout() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <Link to="/" className={styles.brand}>
-            Sistema de Aluguel de Carros
+            <Logo />
           </Link>
           <nav aria-label="Navegação principal">
             <ul className={styles.navList}>
